@@ -3,7 +3,7 @@ var AlarmClock = require('./modules/SebastiaanLuca/AlarmClock/src/AlarmClock.js'
 
 //
 
-var alarm = new AlarmClock({
+new AlarmClock({
     // Run every day at
     at: {hour: 7, minute: 50},
     
