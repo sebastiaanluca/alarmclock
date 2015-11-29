@@ -1,12 +1,15 @@
-var debug = require('debug')('app');
+var debug = require('debug')('alarmclock:app');
 
-var fs = require('fs');
-var request = require('request');
+var Player = require('./modules/SebastiaanLuca/Player/src/Player.js');
+var Playlist = require('./modules/SebastiaanLuca/Player/src/Playlist.js');
+var Track = require('./modules/SebastiaanLuca/Player/src/Track.js');
 
-//var lame = require('lame');
-var pls = require('playlist-parser').PLS;
-var Player = require('player');
+//
+var sources = [
+    'http://stream.boosh.fm/booshfm_mp3256.pls'
+];
 
+// Speaker volume
 //var loudness = require('loudness');
 //var Speaker = require('speaker');
 
@@ -14,47 +17,9 @@ var Player = require('player');
 //    console.log('Set volume to 50%');
 //});
 
-var playlist = 'http://stream.boosh.fm/booshfm_mp3256.pls';
+//
+var playlist = new Playlist(sources);
+var player = new Player(playlist);
 
-request.get(playlist, function (error, response, body) {
-    
-    // Error handling
-    if (error) {
-        debug('Error loading %s (error)', playlist, response.statusCode);
-        
-        return;
-    }
-    
-    if (response.statusCode != 200) {
-        debug('Error loading %s (status code)', playlist, response.statusCode);
-        
-        return;
-    }
-    
-    // Parse playlist and get streams
-    var streams = pls.parse(body);
-    var source = streams[0].file;
-    
-    debug('Found a playable stream: ' + source);
-    
-    // Play stream
-    var player = new Player([source]);
-    
-    player.enable('stream');
-    player.play();
-    
-    player.on('playing', function (item) {
-        debug('Playing %s', item.src);
-    });
-    
-    player.on('playend', function (item) {
-        debug('Stopped playing %s', item.src);
-        
-        debug('Stopping playback');
-        player.stop();
-    });
-    
-    player.on('error', function (err) {
-        debug('Error playing source', err);
-    });
-});
+player.play();
+

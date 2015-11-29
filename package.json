@@ -7,15 +7,14 @@
     "private": true,
     "main": "app/app.js",
     "dependencies": {
-        "fs": "0.0.2",
-        "lame": "^1.2.3",
+        "deasync": "^0.1.4",
         "loudness": "^0.2.2",
         "player": "^0.6.1",
         "playlist-parser": "0.0.12",
         "request": "^2.67.0",
-        "speaker": "^0.2.6"
+        "speaker": "^0.2.6",
+        "debug": "^2.2.0"
     },
     "devDependencies": {
-        "debug": "^2.2.0"
     }
 }
