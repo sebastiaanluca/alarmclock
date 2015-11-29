@@ -22,4 +22,3 @@ var playlist = new Playlist(sources);
 var player = new Player(playlist);
 
 player.play();
-
