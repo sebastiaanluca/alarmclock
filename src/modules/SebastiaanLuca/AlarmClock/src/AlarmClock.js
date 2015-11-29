@@ -1,6 +1,7 @@
 var debug = require('debug')('SebastiaanLuca:AlarmClock:AlarmClock');
 
 var _ = require('lodash');
+var moment = require('moment');
 var schedule = require('node-schedule');
 var loudness = require('loudness');
 
@@ -11,8 +12,8 @@ var Playlist = require('../../Player/src/Playlist.js');
 
 module.exports = function AlarmClock(options) {
     
-    var alarmTime = options.at;
-    var playTime = options.playTime;
+    var alarmTime = moment(options.at);
+    var playDuration = options.playTime;
     var volume = options.volume;
     
     var playlist;
@@ -49,16 +50,16 @@ module.exports = function AlarmClock(options) {
      * Initialize the alarm schedules
      */
     var initAlarm = function () {
-        debug('Setting an alarm for %s:%s', alarmTime.hour, alarmTime.minute);
+        debug('Setting an alarm for %s:%s', alarmTime.hour(), alarmTime.minute());
         
         // Define amounts of minutes to play track before ending alarm
-        var fixedSnoozeTime = _.clone(alarmTime);
-        fixedSnoozeTime.minute += playTime;
+        var fixedSnoozeTime = moment(alarmTime);
+        fixedSnoozeTime.add(playDuration, 'minutes');
         
-        debug('Derrrrrr %s:%s', fixedSnoozeTime.hour, fixedSnoozeTime.minute);
+        debug('Snoozing alarm at %s:%s', fixedSnoozeTime.hour(), fixedSnoozeTime.minute());
         
-        schedule.scheduleJob(alarmTime, onAlarmTriggerHandler);
-        schedule.scheduleJob(fixedSnoozeTime, onFixedSnoozeTriggerHandler);
+        schedule.scheduleJob({hour: alarmTime.hour(), minute: alarmTime.minute()}, onAlarmTriggerHandler);
+        schedule.scheduleJob({hour: fixedSnoozeTime.hour(), minute: fixedSnoozeTime.minute()}, onFixedSnoozeTriggerHandler);
     };
     
     

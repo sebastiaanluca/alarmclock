@@ -11,6 +11,7 @@
     "debug": "^2.2.0",
     "lodash": "^3.10.1",
     "loudness": "^0.2.2",
+    "moment": "^2.10.6",
     "node-schedule": "^0.6.0",
     "player": "^0.6.1",
     "playlist-parser": "0.0.12",
