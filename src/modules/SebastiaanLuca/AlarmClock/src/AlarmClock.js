@@ -34,6 +34,7 @@ module.exports = function AlarmClock(options) {
     
     
     var init = function () {
+        // TODO: move player config out of here and link to alarm clock using events?
         initPlayer();
         initAlarm();
     };
@@ -48,7 +49,11 @@ module.exports = function AlarmClock(options) {
         player = new Player(playlist);
         
         // TODO: shuffle should be a config option? (config being a readable/writable config file here)
-        // Should shuffle streams, not the backup alarm
+        // Should shuffle streams, not the backup alarm (so all values in array but the last
+        // >> player.shuffle = regular shuffle, alarm clock should handle shuffle without
+        // backup alarm
+        // Remove backup alarm from playlist, shuffle, add it back, reset player (in that module, not here)
+        // >>> Shuffle PLAYLIST, override playlist on PLAYER using player.setPlaylist() + reset player interally so it uses the new PLAYLIST
         //  player.shuffle();
         
         // Keep playing same track
@@ -103,6 +108,8 @@ module.exports = function AlarmClock(options) {
         // Start playing audio
         player.play();
         
+        // TODO: emit event (then turn on an LED or animate them like the KITT LED bar)
+        
         // Increase volume every (60 seconds / increase steps) seconds
         schedule.scheduleJob('*/' + (60 / increaseSteps) + ' * * * * *', onIncreaseVolumeTriggerHandler);
     };
@@ -152,7 +159,10 @@ module.exports = function AlarmClock(options) {
         loudness.setVolume(vol, function (err) {
             debug('Speaker volume set to %s%', vol);
         });
-    }
+    };
     
+    this.getPlayer = function () {
+        return player;
+    };
     
 };
