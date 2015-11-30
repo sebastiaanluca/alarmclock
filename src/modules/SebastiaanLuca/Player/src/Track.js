@@ -10,7 +10,17 @@ module.exports = function Track(source) {
     
     var rawSource;
     
-    var getSourceFromStream = function (stream) {
+    
+    
+    var getSourceFromPls = function (stream) {
+        return getSourceFromStream(stream, 'pls');
+    };
+    
+    var getSourceFromM3u = function (stream) {
+        return getSourceFromStream(stream, 'm3u');
+    };
+    
+    var getSourceFromStream = function (stream, type) {
         // De-synchronize request
         // @ https://github.com/abbr/deasync
         var req = deasync(request.get);
@@ -29,17 +39,28 @@ module.exports = function Track(source) {
             debug('Reading streams from audio playlist...');
             
             // Parse playlist and get streams
-            // TODO: parse m3u
-            var streams = parser.PLS.parse(response.body);
+            var streams;
+            
+            switch (type) {
+                case 'pls':
+                    streams = parser.PLS.parse(response.body);
+                    break;
+                
+                case 'm3u':
+                    streams = parser.M3U.parse(response.body);
+                    break;
+                
+                default:
+                    error('Invalid stream playlist type %s', type);
+            }
+            
             var source = streams[0].file;
             
-            //            debug(streams);
-            
-            // FIXME: parsed pls produces / url, no playable mp3
-            //            // Handle Shoutcast sources
-            //            if (source.slice(-1) === '/') {
-            //                source = source + 'listen.pls';
-            //            }
+            // TODO: add Shoutcast support (parsed pls produces / url, no playable mp3)
+            //    // Handle Shoutcast sources
+            //    if (source.slice(-1) === '/') {
+            //        source = source + 'listen.pls';
+            //    }
             
             debug('Found a playable stream: ' + source);
             
@@ -71,7 +92,11 @@ module.exports = function Track(source) {
                 break;
             
             case 'pls':
-                rawSource = getSourceFromStream(source);
+                rawSource = getSourceFromPls(source);
+                break;
+            
+            case 'm3u':
+                rawSource = getSourceFromM3u(source);
                 break;
             
             default:
@@ -80,7 +105,5 @@ module.exports = function Track(source) {
         
         return rawSource;
     }
-    
-    
     
 };

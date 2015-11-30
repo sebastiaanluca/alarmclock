@@ -84,7 +84,7 @@ module.exports = function AlarmClock(options) {
             //    'http://1.fm/TuneIn/dubstep128k.pls',
             //    'http://www.plusfm.net/plusfm.m3u',
             'http://stream.boosh.fm/booshfm_mp3256.pls',
-            //    'http://stream.house-radio.com:8000/main.m3u',
+            'http://stream.house-radio.com:8000/main.m3u',
             '../resources/audio/alarm1.mp3'
         ];
     };
