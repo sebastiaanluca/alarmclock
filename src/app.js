@@ -10,6 +10,9 @@ new AlarmClock({
     // Auto-snooze after x minutes
     playTime: 120,
     
-    // Set speaker volume
-    volume: 20
+    // Set speaker target volume
+    volume: 50,
+    
+    // Duration to increase volume to target level (in minutes)
+    increaseDuration: 10
 });

@@ -12,15 +12,24 @@ var Playlist = require('../../Player/src/Playlist.js');
 
 module.exports = function AlarmClock(options) {
     
+    var self = this;
+    
     var alarmTime = moment(options.at);
     var playDuration = options.playTime;
-    var volume = options.volume;
+    var targetVolume = options.volume;
+    
+    var increaseDuration = options.increaseDuration;
+    // Number of times to increase volume per minute
+    var increaseSteps = 5;
+    var increaseVolume = targetVolume / increaseDuration / increaseSteps;
     
     var playlist;
     var player;
     
     var alarmJob;
     var fixedSnoozeJob;
+    
+    var currentVolume = 0;
     
     
     
@@ -83,29 +92,19 @@ module.exports = function AlarmClock(options) {
     
     
     /*
-     * Reset speaker volume
-     */
-    var resetVolume = function () {
-        debug('Setting speaker volume to %s%', volume);
-        
-        loudness.setVolume(volume, function () {
-            //
-        });
-    };
-    
-    
-    
-    /*
      * Alarm job trigger event
      */
     var onAlarmTriggerHandler = function () {
         debug('Alarm triggered!');
         
-        // Make sure we can hear something
-        resetVolume();
+        // Start from complete silence before we start playing anything
+        self.setVolume(0);
         
         // Start playing audio
         player.play();
+        
+        // Increase volume every (60 seconds / increase steps) seconds
+        schedule.scheduleJob('*/' + (60 / increaseSteps) + ' * * * * *', onIncreaseVolumeTriggerHandler);
     };
     
     /*
@@ -118,8 +117,42 @@ module.exports = function AlarmClock(options) {
         player.stop();
     };
     
+    var onIncreaseVolumeTriggerHandler = function () {
+        debug('Gradually increasing volume by %s%', increaseVolume);
+        
+        self.setVolume(currentVolume);
+        
+        // Reached target volume
+        if (currentVolume >= targetVolume) {
+            debug('Reached target volume %s, cancelling volume increase job', targetVolume);
+            
+            // Cancel volume job
+            this.cancel();
+        }
+        
+        // Volume job runs immediately, so we need to time it right
+        // (set to 0 on first run and end at target volume on the minute)
+        currentVolume += increaseVolume;
+    };
+    
     
     
     init();
+    
+    
+    //
+    
+    
+    
+    this.getVolume = loudness.getVolume(function (err, vol) {
+        return vol;
+    });
+    
+    this.setVolume = function (vol) {
+        loudness.setVolume(vol, function (err) {
+            debug('Speaker volume set to %s%', vol);
+        });
+    }
+    
     
 };
