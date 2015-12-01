@@ -26,12 +26,24 @@ var alarm = new AlarmClock({
 // Use in Control event handler to control player based in physical user input
 var player = alarm.getPlayer();
 
-Controls.on('playPauseButtonPressed', function (isPressed) {
-    debug('Handling playPauseButtonPressed event', isPressed);
+// TODO: move to event handler (not part of any module!)
+Controls.on('playPauseButtonPressed', function () {
+    debug('Handling playPauseButtonPressed event');
+    
+    if (player.isPlaying()) {
+        debug('PAUSE');
+        player.pause();
+        
+        return;
+    }
+    
+    debug('PLAY');
+    player.play();
 });
 
 //
 
+// TODO: move to separate module
 var quit = function () {
     debug('Exiting application.');
     
@@ -45,5 +57,11 @@ var quit = function () {
     }, 1000)
 };
 
+var quitWithError = function (error) {
+    debug(error);
+    
+    quit();
+};
+
 process.on('SIGINT', quit);
-process.on('uncaughtException', quit);
+process.on('uncaughtException', quitWithError);

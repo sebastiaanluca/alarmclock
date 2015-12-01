@@ -13,6 +13,7 @@ var Controls = function Controls() {
     
     // Input
     var btnPlayPause = new Gpio(4, 'in', 'both');
+    var btnPlayPausePressTime = (new Date().getTime());
     
     // Output
     var appRunningIndicatorLed = new Gpio(25, 'out');
@@ -40,14 +41,28 @@ var Controls = function Controls() {
             throw err;
         }
         
-        self.emit('playPauseButtonPressed', {isPressed: status == 1});
-        
-        if (status == 1) {
-            debug('Button pressed');
+        // Handle when button is released
+        if (status != 1) {
             return;
         }
         
-        debug('Button released');
+        // Handle contact bounce
+        // @ http://arduino.stackexchange.com/questions/408/why-does-my-sketch-report-too-many-button-presses
+        // TODO: move to separate Button module?
+        var timeDifference = (new Date().getTime()) - btnPlayPausePressTime;
+        
+        if (timeDifference < 1000) {
+            debug('Contact bounce detected, skipping button press!');
+            
+            return;
+        }
+        
+        // Handle button press
+        debug('Button pressed');
+        self.emit('playPauseButtonPressed');
+        
+        // Save current time for future reference
+        btnPlayPausePressTime = (new Date().getTime());
     });
     
     

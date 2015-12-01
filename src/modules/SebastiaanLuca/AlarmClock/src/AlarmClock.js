@@ -1,6 +1,7 @@
 var debug = require('debug')('SebastiaanLuca:AlarmClock:AlarmClock');
 
 var _ = require('lodash');
+var appRoot = require('app-root-path');
 var moment = require('moment');
 var schedule = require('node-schedule');
 var loudness = require('loudness');
@@ -90,7 +91,7 @@ module.exports = function AlarmClock(options) {
             //    'http://www.plusfm.net/plusfm.m3u',
             'http://stream.boosh.fm/booshfm_mp3256.pls',
             'http://stream.house-radio.com:8000/main.m3u',
-            '../resources/audio/alarm1.mp3'
+            appRoot + '/resources/audio/alarm1.mp3'
         ];
     };
     

@@ -13,8 +13,14 @@ module.exports = function Player(playlist) {
     var currentPlaylistTrack = 0;
     //    var currentTrack = null;
     
+    
+    
     function init() {
+        // Enable support for streams
         player.enable('stream');
+        
+        // Set to paused as we're not playing anything yet (don't know why it's `false` in the first place)
+        player.paused = true;
         
         for (var i = 0; i < playlist.tracks.length; ++i) {
             var track = playlist.getTrackAt(i);
@@ -31,6 +37,8 @@ module.exports = function Player(playlist) {
             player.add(source);
         }
     }
+    
+    
     
     /*
      * Player events
@@ -66,6 +74,8 @@ module.exports = function Player(playlist) {
         player.next();
     });
     
+    
+    
     init();
     
     
@@ -94,12 +104,17 @@ module.exports = function Player(playlist) {
         player.play();
     };
     
+    this.pause = function () {
+        player.pause();
+    };
+    
     this.stop = function () {
         player.stop();
     };
     
+    // FIXME: just shuffles the playlist, but the player is using its own (recreate player with shuffled playlist)
     this.shuffle = function () {
-        playlist.shuffle(); // FIXME: just shuffles the playlist, but the player is using its own (recreate player with shuffled playlist)
+        playlist.shuffle();
     };
     
     this.repeat = function (r) {
