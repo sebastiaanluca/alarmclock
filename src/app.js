@@ -26,6 +26,8 @@ var alarm = new AlarmClock({
 // Use in Control event handler to control player based in physical user input
 var player = alarm.getPlayer();
 
+
+
 // TODO: move to event handler (not part of any module!)
 Controls.on('playPauseButtonPressed', function () {
     debug('Handling playPauseButtonPressed event');
