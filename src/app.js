@@ -18,7 +18,7 @@ var ControlsEventHandler = require('EventHandlers/ControlsEventHandler.js');
 
 //
 
-var DEFAULT_VOLUME = 80;
+var DEFAULT_VOLUME = 75;
 
 //
 
@@ -36,6 +36,7 @@ Volume.setVolume(DEFAULT_VOLUME);
  */
 
 // TODO: move to config file
+// See https://github.com/motdotla/dotenv + https://github.com/harishanchu/nodejs-config
 // TODO: add button to reset (player playlist and reload+readd streams from config file (should it have changed))
 var tracks = [
     'http://mp3.streampower.be/stubru-high.mp3',
