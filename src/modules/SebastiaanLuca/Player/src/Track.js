@@ -27,9 +27,10 @@ module.exports = function Track(source) {
         
         try {
             // Get playlist
-            //  var response = req(stream);
             var response = req({
                 uri: stream,
+                
+                // Cancel after 5 seconds
                 timeout: 5000
             });
             
@@ -40,7 +41,7 @@ module.exports = function Track(source) {
                 return;
             }
             
-            debug('Reading streams from audio playlist...');
+            debug('Reading raw streams from %s', stream);
             
             // Parse playlist and get streams
             var streams;
@@ -59,12 +60,6 @@ module.exports = function Track(source) {
             }
             
             var source = streams[0].file;
-            
-            // TODO: add Shoutcast support (parsed pls produces / url, no playable mp3)
-            //    // Handle Shoutcast sources
-            //    if (source.slice(-1) === '/') {
-            //        source = source + 'listen.pls';
-            //    }
             
             debug('Found a playable stream: ' + source);
             
@@ -87,8 +82,6 @@ module.exports = function Track(source) {
         }
         
         var extension = StringHelper.getFileExtension(source);
-        
-        debug('Track source extension of %s is %s', source, extension);
         
         switch (extension) {
             case 'mp3':
