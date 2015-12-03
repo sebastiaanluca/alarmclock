@@ -65,6 +65,10 @@ module.exports = function Player(playlist) {
     
     this.isPlaying = function () {
         // FIXME: get it from the MPC player directly
+        player.status(function (a) {
+            debug('>>>>', a);
+        });
+        
         return isPlaying;
     };
     
@@ -94,6 +98,14 @@ module.exports = function Player(playlist) {
     
     this.stop = function () {
         player.stop();
+    };
+    
+    this.next = function () {
+        player.next();
+    };
+    
+    this.previous = function () {
+        player.previous();
     };
     
     this.shuffle = function () {

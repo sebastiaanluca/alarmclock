@@ -14,6 +14,8 @@ var Controls = function Controls() {
     
     // Input
     var btnPlayPause = new Button(17);
+    var btnPlayPreviousTrack = new Button(27);
+    var btnPlayNextTrack = new Button(22);
     
     // Output
     var appRunningIndicatorLed = new Gpio(25, 'out');
@@ -37,6 +39,16 @@ var Controls = function Controls() {
     btnPlayPause.on('pressed', function () {
         self.emit('playPauseButtonPressed');
     });
+    
+    btnPlayPreviousTrack.on('pressed', function () {
+        self.emit('playPreviousTrackButtonPressed');
+    });
+    
+    btnPlayNextTrack.on('pressed', function () {
+        self.emit('playNextTrackButtonPressed');
+    });
+    
+    
     
     // Gracefully exit on CTRL+C and errors
     process.on('forceQuitApplication', quitHandler);

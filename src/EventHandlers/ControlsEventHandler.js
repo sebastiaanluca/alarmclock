@@ -18,5 +18,17 @@ module.exports = function ControlsEventHandler(Controls, player) {
         player.play();
     });
     
+    Controls.on('playPreviousTrackButtonPressed', function () {
+        debug('Handling playPreviousTrackButtonPressed event');
+        
+        player.previous();
+    });
+    
+    Controls.on('playNextTrackButtonPressed', function () {
+        debug('Handling playNextTrackButtonPressed event');
+        
+        player.next();
+    });
+    
     
 };
