@@ -4,6 +4,7 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
 var Gpio = require('onoff').Gpio;
+var Button = require('modules/SebastiaanLuca/Controls/src/Peripherals/Button.js');
 
 //
 
@@ -12,8 +13,7 @@ var Controls = function Controls() {
     var self = this;
     
     // Input
-    var btnPlayPause = new Gpio(17, 'in', 'both');
-    var btnPlayPausePressTime = (new Date().getTime());
+    var btnPlayPause = new Button(17);
     
     // Output
     var appRunningIndicatorLed = new Gpio(25, 'out');
@@ -29,40 +29,43 @@ var Controls = function Controls() {
         debug('Cleaning up our mess.');
         
         // Clear perhipherals
-        btnPlayPause.unexport();
         appRunningIndicatorLed.unexport();
     };
     
     
     
     // Watch play/pause button input
-    btnPlayPause.watch(function (err, status) {
-        if (err) {
-            throw err;
-        }
-        
-        // Handle when button is released
-        if (status != 1) {
-            return;
-        }
-        
-        // Handle contact bounce
-        // @ http://arduino.stackexchange.com/questions/408/why-does-my-sketch-report-too-many-button-presses
-        // TODO: move to separate Button module so we can reuse it?
-        var timeDifference = (new Date().getTime()) - btnPlayPausePressTime;
-        
-        if (timeDifference < 320) {
-            debug('Contact bounce detected, skipping button press!');
-            
-            return;
-        }
-        
-        // Handle button press
-        debug('Button pressed');
+    //    btnPlayPause.watch(function (err, status) {
+    //        if (err) {
+    //            throw err;
+    //        }
+    //        
+    //        // Handle when button is released
+    //        if (status != 1) {
+    //            return;
+    //        }
+    //        
+    //        // Handle contact bounce
+    //        // @ http://arduino.stackexchange.com/questions/408/why-does-my-sketch-report-too-many-button-presses
+    //        // TODO: move to separate Button module so we can reuse it?
+    //        var timeDifference = (new Date().getTime()) - btnPlayPausePressTime;
+    //        
+    //        if (timeDifference < 200) {
+    //            debug('Contact bounce detected, skipping button press!');
+    //            
+    //            return;
+    //        }
+    //        
+    //        // Handle button press
+    //        debug('Button pressed');
+    //        self.emit('playPauseButtonPressed');
+    //        
+    //        // Save current time for future reference
+    //        btnPlayPausePressTime = (new Date().getTime());
+    //    });
+    
+    btnPlayPause.on('pressed', function () {
         self.emit('playPauseButtonPressed');
-        
-        // Save current time for future reference
-        btnPlayPausePressTime = (new Date().getTime());
     });
     
     
