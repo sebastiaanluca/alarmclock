@@ -5,6 +5,8 @@ var EventEmitter = require('events').EventEmitter;
 
 var Gpio = require('onoff').Gpio;
 
+var Button = require('modules/SebastiaanLuca/Controls/src/Peripherals/Button.js');
+
 //
 
 var Controls = function Controls() {
@@ -12,8 +14,9 @@ var Controls = function Controls() {
     var self = this;
     
     // Input
-    var btnPlayPause = new Gpio(17, 'in', 'both');
-    var btnPlayPausePressTime = (new Date().getTime());
+    var btnPlayPause = new Button(17);
+    var btnPlayPreviousTrack = new Button(27);
+    var btnPlayNextTrack = new Button(22);
     
     // Output
     var appRunningIndicatorLed = new Gpio(25, 'out');
@@ -25,52 +28,36 @@ var Controls = function Controls() {
         appRunningIndicatorLed.writeSync(1);
     };
     
-    var quit = function () {
+    var quitHandler = function () {
         debug('Cleaning up our mess.');
         
         // Clear perhipherals
-        btnPlayPause.unexport();
         appRunningIndicatorLed.unexport();
     };
     
     
     
-    // Watch play/pause button input
-    btnPlayPause.watch(function (err, status) {
-        if (err) {
-            throw err;
-        }
-        
-        // Handle when button is released
-        if (status != 1) {
-            return;
-        }
-        
-        // Handle contact bounce
-        // @ http://arduino.stackexchange.com/questions/408/why-does-my-sketch-report-too-many-button-presses
-        // TODO: move to separate Button module so we can reuse it?
-        var timeDifference = (new Date().getTime()) - btnPlayPausePressTime;
-        
-        if (timeDifference < 320) {
-            debug('Contact bounce detected, skipping button press!');
-            
-            return;
-        }
-        
-        // Handle button press
-        debug('Button pressed');
+    
+    btnPlayPause.on('pressed', function () {
         self.emit('playPauseButtonPressed');
-        
-        // Save current time for future reference
-        btnPlayPausePressTime = (new Date().getTime());
+    });
+    
+    btnPlayPreviousTrack.on('pressed', function () {
+        self.emit('playPreviousTrackButtonPressed');
+    });
+    
+    btnPlayNextTrack.on('pressed', function () {
+        self.emit('playNextTrackButtonPressed');
     });
     
     
     
-    init();
-    
     // Gracefully exit on CTRL+C and errors
-    process.on('forceQuitApplication', quit);
+    process.on('forceQuitApplication', quitHandler);
+    
+    
+    
+    init();
     
 };
 
