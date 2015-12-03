@@ -18,7 +18,7 @@ var ControlsEventHandler = require('EventHandlers/ControlsEventHandler.js');
 
 //
 
-var DEFAULT_VOLUME = 85;
+var DEFAULT_VOLUME = 80;
 
 //
 
