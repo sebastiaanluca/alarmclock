@@ -29,22 +29,20 @@ module.exports = function Playlist(sources) {
         return this.tracks[index];
     };
     
-    // TODO: getNextTrack, getPreviousTrack
     
     
-    
-    this.shuffle = function () {
-        debug('Shuffling playlist');
-        
-        if (this.tracks.length <= 1) {
-            debug('Not enough tracks in playlist to shuffle');
-            
-            return;
-        }
-        
-        this.tracks = _.shuffle(this.tracks);
-        
-        return this.tracks;
-    };
+    //    this.shuffle = function () {
+    //        debug('Shuffling playlist');
+    //        
+    //        if (this.tracks.length <= 1) {
+    //            debug('Not enough tracks in playlist to shuffle');
+    //            
+    //            return;
+    //        }
+    //        
+    //        this.tracks = _.shuffle(this.tracks);
+    //        
+    //        return this.tracks;
+    //    };
     
 };

@@ -27,7 +27,11 @@ module.exports = function Track(source) {
         
         try {
             // Get playlist
-            var response = req(stream);
+            //  var response = req(stream);
+            var response = req({
+                uri: stream,
+                timeout: 5000
+            });
             
             // Error handling
             if (response.statusCode != 200) {
@@ -84,7 +88,7 @@ module.exports = function Track(source) {
         
         var extension = StringHelper.getFileExtension(source);
         
-        debug('Track source extension is %s', extension);
+        debug('Track source extension of %s is %s', source, extension);
         
         switch (extension) {
             case 'mp3':
@@ -101,6 +105,10 @@ module.exports = function Track(source) {
             
             default:
                 debug('Undefined source type');
+                
+                // Provide a fallback, maybe the player
+                // can handle the wrapping format
+                rawSource = source;
         }
         
         return rawSource;

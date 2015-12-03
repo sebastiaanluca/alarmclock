@@ -10,4 +10,5 @@ var StringHelper = function () {
     
 };
 
+// Singleton
 module.exports = new StringHelper();

@@ -1,21 +1,15 @@
 var debug = require('debug')('SebastiaanLuca:AlarmClock:AlarmClock');
 
 var _ = require('lodash');
-var appRoot = require('app-root-path');
-var moment = require('moment');
-var schedule = require('node-schedule');
-var loudness = require('loudness');
-
-var Player = require('../../Player/src/Player.js');
-var Playlist = require('../../Player/src/Playlist.js');
+var Moment = require('moment');
+var Schedule = require('node-schedule');
+var Volume = require('modules/SebastiaanLuca/Volume/src/Volume.js');
 
 //
 
-module.exports = function AlarmClock(options) {
+module.exports = function AlarmClock(options, player) {
     
-    var self = this;
-    
-    var alarmTime = moment(options.at);
+    var alarmTime = Moment(options.at);
     var playDuration = options.playTime;
     var targetVolume = options.volume;
     
@@ -23,43 +17,18 @@ module.exports = function AlarmClock(options) {
     // Number of times to increase volume per minute
     var increaseSteps = 5;
     var increaseVolume = targetVolume / increaseDuration / increaseSteps;
-    
-    var playlist;
-    var player;
+    var currentVolume = 0;
     
     var alarmJob;
     var fixedSnoozeJob;
     
-    var currentVolume = 0;
-    
     
     
     var init = function () {
-        // TODO: move player config out of here and link to alarm clock using events?
-        initPlayer();
         initAlarm();
     };
     
     
-    
-    /*
-     * Initialize the audio player
-     */
-    var initPlayer = function () {
-        playlist = new Playlist(getSources());
-        player = new Player(playlist);
-        
-        // TODO: shuffle should be a config option? (config being a readable/writable config file here)
-        // Should shuffle streams, not the backup alarm (so all values in array but the last
-        // >> player.shuffle = regular shuffle, alarm clock should handle shuffle without
-        // backup alarm
-        // Remove backup alarm from playlist, shuffle, add it back, reset player (in that module, not here)
-        // >>> Shuffle PLAYLIST, override playlist on PLAYER using player.setPlaylist() + reset player interally so it uses the new PLAYLIST
-        //  player.shuffle();
-        
-        // Keep playing same track
-        player.repeat(1);
-    };
     
     /*
      * Initialize the alarm schedules
@@ -68,31 +37,13 @@ module.exports = function AlarmClock(options) {
         debug('Setting an alarm for %s:%s', alarmTime.hour(), alarmTime.minute());
         
         // Define amounts of minutes to play track before ending alarm
-        var fixedSnoozeTime = moment(alarmTime);
+        var fixedSnoozeTime = Moment(alarmTime);
         fixedSnoozeTime.add(playDuration, 'minutes');
         
         debug('Snoozing alarm at %s:%s', fixedSnoozeTime.hour(), fixedSnoozeTime.minute());
         
-        alarmJob = schedule.scheduleJob({hour: alarmTime.hour(), minute: alarmTime.minute()}, onAlarmTriggerHandler);
-        fixedSnoozeJob = schedule.scheduleJob({hour: fixedSnoozeTime.hour(), minute: fixedSnoozeTime.minute()}, onFixedSnoozeTriggerHandler);
-    };
-    
-    
-    
-    /*
-     * Return the audio sources for the audio player
-     */
-    var getSources = function () {
-        // TODO: move to config file
-        return [
-            //    'http://nsbradio.co.uk/listen128k.pls',
-            //    'http://uk1.internet-radio.com:15634/listen.pls',
-            //    'http://1.fm/TuneIn/dubstep128k.pls',
-            //    'http://www.plusfm.net/plusfm.m3u',
-            'http://stream.boosh.fm/booshfm_mp3256.pls',
-            'http://stream.house-radio.com:8000/main.m3u',
-            appRoot + '/resources/audio/alarm1.mp3'
-        ];
+        alarmJob = Schedule.scheduleJob({hour: alarmTime.hour(), minute: alarmTime.minute()}, onAlarmTriggerHandler);
+        fixedSnoozeJob = Schedule.scheduleJob({hour: fixedSnoozeTime.hour(), minute: fixedSnoozeTime.minute()}, onFixedSnoozeTriggerHandler);
     };
     
     
@@ -104,7 +55,7 @@ module.exports = function AlarmClock(options) {
         debug('Alarm triggered!');
         
         // Start from complete silence before we start playing anything
-        self.setVolume(0);
+        Volume.setVolume(0);
         
         // Start playing audio
         player.play();
@@ -112,7 +63,7 @@ module.exports = function AlarmClock(options) {
         // TODO: emit event (then turn on an LED or animate them like the KITT LED bar)
         
         // Increase volume every (60 seconds / increase steps) seconds
-        schedule.scheduleJob('*/' + (60 / increaseSteps) + ' * * * * *', onIncreaseVolumeTriggerHandler);
+        Schedule.scheduleJob('*/' + (60 / increaseSteps) + ' * * * * *', onIncreaseVolumeTriggerHandler);
     };
     
     /*
@@ -128,7 +79,7 @@ module.exports = function AlarmClock(options) {
     var onIncreaseVolumeTriggerHandler = function () {
         debug('Gradually increasing volume by %s%', increaseVolume);
         
-        self.setVolume(currentVolume);
+        Volume.setVolume(Math.round(currentVolume));
         
         // Reached target volume
         if (currentVolume >= targetVolume) {
@@ -146,24 +97,5 @@ module.exports = function AlarmClock(options) {
     
     
     init();
-    
-    
-    //
-    
-    
-    
-    this.getVolume = loudness.getVolume(function (err, vol) {
-        return vol;
-    });
-    
-    this.setVolume = function (vol) {
-        loudness.setVolume(vol, function (err) {
-            debug('Speaker volume set to %s%', vol);
-        });
-    };
-    
-    this.getPlayer = function () {
-        return player;
-    };
     
 };
