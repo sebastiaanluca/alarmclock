@@ -18,40 +18,36 @@ var Button = function Button(pin) {
     
     
     var init = function () {
-        // Warning! This has to be created in a function,
-        // as it will throw errors otherwise.
-        //        button = new Gpio(pin, 'in', 'both');
-        
-        //        button.watch(function (err, status) {
-        //            if (err) {
-        //                throw err;
-        //            }
-        //            
-        //            // Button released
-        //            if (status != 1) {
-        //                self.emit('released');
-        //                
-        //                return;
-        //            }
-        //            
-        //            // Manually handle contact bounce
-        //            // @ http://arduino.stackexchange.com/questions/408/why-does-my-sketch-report-too-many-button-presses
-        //            var timeDifference = (new Date().getTime()) - bounceTime;
-        //            
-        //            if (timeDifference < 200) {
-        //                debug('Contact bounce detected, skipping button press!');
-        //                
-        //                return;
-        //            }
-        //            
-        //            // Handle button press
-        //            debug('Button pressed');
-        //            
-        //            self.emit('pressed');
-        //            
-        //            // Save current time for future reference
-        //            bounceTime = (new Date().getTime());
-        //        });
+        button.watch(function (err, status) {
+            if (err) {
+                throw err;
+            }
+            
+            // Button released
+            if (status != 1) {
+                self.emit('released');
+                
+                return;
+            }
+            
+            // Manually handle contact bounce
+            // @ http://arduino.stackexchange.com/questions/408/why-does-my-sketch-report-too-many-button-presses
+            var timeDifference = (new Date().getTime()) - bounceTime;
+            
+            if (timeDifference < 200) {
+                debug('Contact bounce detected, skipping button press!');
+                
+                return;
+            }
+            
+            // Handle button press
+            debug('Button pressed');
+            
+            self.emit('pressed');
+            
+            // Save current time for future reference
+            bounceTime = (new Date().getTime());
+        });
     };
     
     
