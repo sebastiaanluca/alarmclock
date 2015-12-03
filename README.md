@@ -17,4 +17,4 @@ To provide a pleasant way to wake up, as I keep hitting snooze on all my other a
 ## Development
 
 ### Debugging
-Run `DEBUG=alarmclock:*,SebastiaanLuca:* node src/app.js` to execute and debug the application.
+Run `clear && export NODE_PATH=src/ && DEBUG=alarmclock:*,SebastiaanLuca:* node src/app.js` to execute and debug the application.

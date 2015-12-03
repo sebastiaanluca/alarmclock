@@ -10,6 +10,7 @@
     "app-root-path": "^1.0.0",
     "deasync": "^0.1.4",
     "debug": "^2.2.0",
+    "komponist": "^0.1.0",
     "lodash": "^3.10.1",
     "loudness": "^0.2.2",
     "moment": "^2.10.6",

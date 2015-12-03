@@ -12,7 +12,7 @@ var Controls = function Controls() {
     var self = this;
     
     // Input
-    var btnPlayPause = new Gpio(4, 'in', 'both');
+    var btnPlayPause = new Gpio(17, 'in', 'both');
     var btnPlayPausePressTime = (new Date().getTime());
     
     // Output
@@ -48,10 +48,10 @@ var Controls = function Controls() {
         
         // Handle contact bounce
         // @ http://arduino.stackexchange.com/questions/408/why-does-my-sketch-report-too-many-button-presses
-        // TODO: move to separate Button module?
+        // TODO: move to separate Button module so we can reuse it?
         var timeDifference = (new Date().getTime()) - btnPlayPausePressTime;
         
-        if (timeDifference < 1000) {
+        if (timeDifference < 320) {
             debug('Contact bounce detected, skipping button press!');
             
             return;
