@@ -18,12 +18,16 @@ var ControlsEventHandler = require('EventHandlers/ControlsEventHandler.js');
 
 //
 
+var DEFAULT_VOLUME = 85;
+
+//
+
 /*
  * Volume
  */
 
 // Set default system volume
-Volume.setVolume(94);
+Volume.setVolume(DEFAULT_VOLUME);
 
 
 
@@ -72,7 +76,7 @@ var alarm = new AlarmClock({
     playTime: 90,
     
     // Set speaker target volume
-    volume: 90,
+    volume: DEFAULT_VOLUME,
     
     // Duration to increase volume to target level (in minutes)
     increaseDuration: 10
