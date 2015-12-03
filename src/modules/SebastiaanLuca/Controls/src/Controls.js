@@ -25,7 +25,7 @@ var Controls = function Controls() {
         appRunningIndicatorLed.writeSync(1);
     };
     
-    var quit = function () {
+    var quitHandler = function () {
         debug('Cleaning up our mess.');
         
         // Clear perhipherals
@@ -34,46 +34,16 @@ var Controls = function Controls() {
     
     
     
-    // Watch play/pause button input
-    //    btnPlayPause.watch(function (err, status) {
-    //        if (err) {
-    //            throw err;
-    //        }
-    //        
-    //        // Handle when button is released
-    //        if (status != 1) {
-    //            return;
-    //        }
-    //        
-    //        // Handle contact bounce
-    //        // @ http://arduino.stackexchange.com/questions/408/why-does-my-sketch-report-too-many-button-presses
-    //        // TODO: move to separate Button module so we can reuse it?
-    //        var timeDifference = (new Date().getTime()) - btnPlayPausePressTime;
-    //        
-    //        if (timeDifference < 200) {
-    //            debug('Contact bounce detected, skipping button press!');
-    //            
-    //            return;
-    //        }
-    //        
-    //        // Handle button press
-    //        debug('Button pressed');
-    //        self.emit('playPauseButtonPressed');
-    //        
-    //        // Save current time for future reference
-    //        btnPlayPausePressTime = (new Date().getTime());
-    //    });
-    
     btnPlayPause.on('pressed', function () {
         self.emit('playPauseButtonPressed');
     });
     
+    // Gracefully exit on CTRL+C and errors
+    process.on('forceQuitApplication', quitHandler);
+    
     
     
     init();
-    
-    // Gracefully exit on CTRL+C and errors
-    process.on('forceQuitApplication', quit);
     
 };
 

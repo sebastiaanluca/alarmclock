@@ -8,46 +8,50 @@ var Gpio = require('onoff').Gpio;
 
 //
 
-var Button = function (pin) {
+var Button = function Button(pin) {
     
     var self = this;
     
-    var button = new Gpio(17, 'in', 'both');
+    var button = new Gpio(pin, 'in', 'both');
     var bounceTime = (new Date().getTime());
     
     
     
     var init = function () {
-        button.watch(function (err, status) {
-            if (err) {
-                throw err;
-            }
-            
-            // Handle when button is released
-            if (status != 1) {
-                self.emit('released');
-                
-                return;
-            }
-            
-            // Handle contact bounce
-            // @ http://arduino.stackexchange.com/questions/408/why-does-my-sketch-report-too-many-button-presses
-            var timeDifference = (new Date().getTime()) - bounceTime;
-            
-            if (timeDifference < 200) {
-                debug('Contact bounce detected, skipping button press!');
-                
-                return;
-            }
-            
-            // Handle button press
-            debug('Button pressed');
-            
-            self.emit('pressed');
-            
-            // Save current time for future reference
-            bounceTime = (new Date().getTime());
-        });
+        // Warning! This has to be created in a function,
+        // as it will throw errors otherwise.
+        //        button = new Gpio(pin, 'in', 'both');
+        
+        //        button.watch(function (err, status) {
+        //            if (err) {
+        //                throw err;
+        //            }
+        //            
+        //            // Button released
+        //            if (status != 1) {
+        //                self.emit('released');
+        //                
+        //                return;
+        //            }
+        //            
+        //            // Manually handle contact bounce
+        //            // @ http://arduino.stackexchange.com/questions/408/why-does-my-sketch-report-too-many-button-presses
+        //            var timeDifference = (new Date().getTime()) - bounceTime;
+        //            
+        //            if (timeDifference < 200) {
+        //                debug('Contact bounce detected, skipping button press!');
+        //                
+        //                return;
+        //            }
+        //            
+        //            // Handle button press
+        //            debug('Button pressed');
+        //            
+        //            self.emit('pressed');
+        //            
+        //            // Save current time for future reference
+        //            bounceTime = (new Date().getTime());
+        //        });
     };
     
     
@@ -58,10 +62,12 @@ var Button = function (pin) {
     
     
     
-    init();
-    
     // Gracefully exit on CTRL+C and errors
     process.on('forceQuitApplication', quitHandler);
+    
+    
+    
+    init();
     
 };
 
@@ -69,4 +75,4 @@ var Button = function (pin) {
 
 util.inherits(Button, EventEmitter);
 
-module.exports = new Button();
+module.exports = Button;
