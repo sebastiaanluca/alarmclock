@@ -46,7 +46,8 @@ var tracks = [
     'http://stream.house-radio.com:8000/main.m3u',
     'http://1.fm/TuneIn/dubstep128k.pls',
     'http://uk1.internet-radio.com:15634/listen.pls',
-    'http://nsbradio.co.uk/listen128k.pls'
+    'http://nsbradio.co.uk/listen128k.pls',
+    'http://178.20.171.32:8058/'
     
     // TODO: mpc can't add tracks using an absolute path :(
     //    appRoot + '/resources/audio/alarm1.mp3'
