@@ -12,7 +12,7 @@ var Controls = function Controls() {
     var self = this;
     
     // Input
-    var btnPlayPause = new Gpio(4, 'in', 'both');
+    var btnPlayPause = new Gpio(17, 'in', 'both');
     var btnPlayPausePressTime = (new Date().getTime());
     
     // Output
