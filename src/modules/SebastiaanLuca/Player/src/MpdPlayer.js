@@ -1,18 +1,13 @@
 var debug = require('debug')('SebastiaanLuca:Player:MpdPlayer');
+
 var Komponist = require('komponist');
+var deasync = require('deasync');
 
 //
 
 module.exports = function Player(playlist) {
     
-    var isPlaying = false;
-    var repeat = true;
-    
     var player;
-    
-    // TODO: update these on play start/stop/etc
-    //    var currentPlaylistTrack = 0;
-    //    var currentTrack = null;
     
     
     
@@ -63,13 +58,26 @@ module.exports = function Player(playlist) {
     
     
     
-    this.isPlaying = function () {
-        // FIXME: get it from the MPC player directly
-        player.status(function (a) {
-            debug('>>>>', a);
+    this.getStatus = function () {
+        var done = false;
+        var status;
+        
+        player.status(function (error, result) {
+            status = result;
+            done = true;
         });
         
-        return isPlaying;
+        require('deasync').loopWhile(function () {
+            return !done;
+        });
+        
+        return status;
+    };
+    
+    this.isPlaying = function () {
+        var status = this.getStatus();
+        
+        return status.state !== 'stop' && status.state !== 'pause';
     };
     
     
