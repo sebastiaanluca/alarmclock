@@ -48,6 +48,7 @@ module.exports = function Player(playlist) {
     
     process.on('forceQuitApplication', function () {
         if (player) {
+            // TODO: not sure if we should stop playing here, maybe another client initiated playback?
             player.stop();
         }
     });
@@ -63,6 +64,7 @@ module.exports = function Player(playlist) {
     
     
     this.isPlaying = function () {
+        // FIXME: get it from the MPC player directly
         return isPlaying;
     };
     
