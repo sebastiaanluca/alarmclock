@@ -52,7 +52,7 @@ module.exports = function AlarmClock(options, player) {
      * Alarm job trigger event
      */
     var onAlarmTriggerHandler = function () {
-        debug('Alarm triggered!');
+        debug('Alarm triggered! It is now %s', moment().format('MMMM Do YYYY, h:mm:ss a'));
         
         // Start from complete silence before we start playing anything
         Volume.setVolume(0);
