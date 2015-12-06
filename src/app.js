@@ -71,16 +71,16 @@ player.repeat(true);
 // Create an alarm clock using our player
 var alarm = new AlarmClock({
     // Run every day at
-    at: {hour: 7, minute: 50},
+    at: {hour: 7, minute: 30},
     
     // Auto-snooze after x minutes
-    playTime: 90,
+    playTime: 10,
     
     // Set speaker target volume
     volume: DEFAULT_VOLUME,
     
     // Duration to increase volume to target level (in minutes)
-    increaseDuration: 10
+    increaseDuration: 5
 }, player);
 
 

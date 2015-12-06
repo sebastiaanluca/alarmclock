@@ -9,23 +9,23 @@ var Volume = require('modules/SebastiaanLuca/Volume/src/Volume.js');
 
 module.exports = function AlarmClock(options, player) {
     
-    var alarmTime = Moment(options.at);
+    //    var alarmTime = Moment(options.at);
     var playDuration = options.playTime;
     var targetVolume = options.volume;
     
     var increaseDuration = options.increaseDuration;
     // Number of times to increase volume per minute
-    var increaseSteps = 5;
+    var increaseSteps = 6;
     var increaseVolume = targetVolume / increaseDuration / increaseSteps;
     var currentVolume = 0;
     
-    var alarmJob;
-    var fixedSnoozeJob;
+    //    var alarmJob;
+    //    var fixedSnoozeJob;
     
     
     
     var init = function () {
-        initAlarm();
+        scheduleAlarm();
     };
     
     
@@ -33,17 +33,28 @@ module.exports = function AlarmClock(options, player) {
     /*
      * Initialize the alarm schedules
      */
-    var initAlarm = function () {
-        debug('Setting an alarm for %s:%s', alarmTime.hour(), alarmTime.minute());
+    var scheduleAlarm = function () {
+        var alarmTime = Moment();
+        //        alarmTime.hour = options.at.hour; // TODO
+        alarmTime.minutes(options.at.minute);
+        alarmTime.seconds(0);
+        
+        // Check if alarm time is set in the past
+        if (alarmTime.isBefore(Moment()) || alarmTime.isSame(Moment())) {
+            //            alarmTime.add(1, 'day'); // TODO
+            alarmTime.add(1, 'hour');
+        }
+        
+        debug('Setting an alarm for :%s // %s', alarmTime.minutes(), alarmTime.toDate());
         
         // Define amounts of minutes to play track before ending alarm
         var fixedSnoozeTime = Moment(alarmTime);
         fixedSnoozeTime.add(playDuration, 'minutes');
         
-        debug('Snoozing alarm at %s:%s', fixedSnoozeTime.hour(), fixedSnoozeTime.minute());
+        debug('Snoozing alarm at :%s // %s', fixedSnoozeTime.minutes(), fixedSnoozeTime.toDate());
         
-        alarmJob = Schedule.scheduleJob({hour: alarmTime.hour(), minute: alarmTime.minute()}, onAlarmTriggerHandler);
-        fixedSnoozeJob = Schedule.scheduleJob({hour: fixedSnoozeTime.hour(), minute: fixedSnoozeTime.minute()}, onFixedSnoozeTriggerHandler);
+        Schedule.scheduleJob(alarmTime.toDate(), onAlarmTriggerHandler);
+        Schedule.scheduleJob(fixedSnoozeTime.toDate(), onFixedSnoozeTriggerHandler);
     };
     
     
@@ -52,34 +63,37 @@ module.exports = function AlarmClock(options, player) {
      * Alarm job trigger event
      */
     var onAlarmTriggerHandler = function () {
-        debug('Alarm triggered!');
+        debug('Alarm triggered! It is now %s', Moment().format('MMMM Do YYYY, h:mm:ss a'));
         
         // Start from complete silence before we start playing anything
-        Volume.setVolume(0);
+        resetVolume();
         
         // Start playing audio
         player.play();
         
-        // TODO: emit event (then turn on an LED or animate them like the KITT LED bar)
+        // TODO: emit event (then pulse LED until alarm snooze event is triggered OR the MPC status changed to paused/stop)
         
         // Increase volume every (60 seconds / increase steps) seconds
         Schedule.scheduleJob('*/' + (60 / increaseSteps) + ' * * * * *', onIncreaseVolumeTriggerHandler);
+        
+        // Schedule next alarm
+        scheduleAlarm();
     };
     
     /*
      * Alarm snooze job trigger event
      */
     var onFixedSnoozeTriggerHandler = function () {
-        debug('Force-snoozing alarm. Stopping playback.');
+        debug('Force-snoozing alarm. Stopping playback. It is now %s', Moment().format('MMMM Do YYYY, h:mm:ss a'));
         
         // Stop audio playback
         player.stop();
     };
     
     var onIncreaseVolumeTriggerHandler = function () {
-        debug('Gradually increasing volume by %s%', increaseVolume);
-        
-        Volume.setVolume(Math.round(currentVolume));
+        debug('Gradually increasing volume by %s% (now at %s)', increaseVolume, currentVolume);
+    
+        Volume.setVolume(currentVolume);
         
         // Reached target volume
         if (currentVolume >= targetVolume) {
@@ -87,11 +101,26 @@ module.exports = function AlarmClock(options, player) {
             
             // Cancel volume job
             this.cancel();
+            
+            currentVolume = targetVolume;
+            
+            return;
         }
         
         // Volume job runs immediately, so we need to time it right
         // (set to 0 on first run and end at target volume on the minute)
         currentVolume += increaseVolume;
+        currentVolume = Math.round(currentVolume);
+    };
+    
+    
+    
+    var resetVolume = function () {
+        // Set current volume to inbetween alarms
+        currentVolume = 0;
+        
+        // Set system volume
+        Volume.setVolume(currentVolume);
     };
     
     
