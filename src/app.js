@@ -5,6 +5,7 @@ console.log('Booting application');
 var debug = require('debug')('alarmclock:app');
 
 require('modules/SebastiaanLuca/Helpers/src/ProcessHelper.js');
+require('modules/SebastiaanLuca/Helpers/src/KeepAwake.js');
 
 var Volume = require('modules/SebastiaanLuca/Volume/src/Volume.js');
 var Player = require('modules/SebastiaanLuca/Player/src/MpdPlayer.js');
@@ -18,7 +19,7 @@ var ControlsEventHandler = require('EventHandlers/ControlsEventHandler.js');
 
 //
 
-var DEFAULT_VOLUME = 75;
+var DEFAULT_VOLUME = 76;
 
 //
 
@@ -48,8 +49,7 @@ var tracks = [
     'http://1.fm/TuneIn/dubstep128k.pls',
     'http://uk1.internet-radio.com:15634/listen.pls',
     'http://nsbradio.co.uk/listen128k.pls',
-    'http://178.20.171.32:8058/',
-    'http://listen.radionomy.com/jamjazz.m3u'
+    'http://178.20.171.32:8058/'
     
     // TODO: mpc can't add tracks using an absolute path :(
     //    appRoot + '/resources/audio/alarm1.mp3'
@@ -71,18 +71,18 @@ player.repeat(true);
  */
 
 // Create an alarm clock using our player
-var alarm = new AlarmClock({
+new AlarmClock({
     // Run every day at
-    at: {hour: 7, minute: 50},
+    at: {hour: 8, minute: 0},
     
     // Auto-snooze after x minutes
-    playTime: 90,
+    playTime: 120,
     
     // Set speaker target volume
     volume: DEFAULT_VOLUME,
     
     // Duration to increase volume to target level (in minutes)
-    increaseDuration: 10
+    increaseDuration: 3
 }, player);
 
 

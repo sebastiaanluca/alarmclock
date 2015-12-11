@@ -66,8 +66,8 @@ module.exports = function Player(playlist) {
             status = result;
             done = true;
         });
-        
-        require('deasync').loopWhile(function () {
+    
+        deasync.loopWhile(function () {
             return !done;
         });
         

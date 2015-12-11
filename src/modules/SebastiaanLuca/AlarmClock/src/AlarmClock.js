@@ -15,7 +15,7 @@ module.exports = function AlarmClock(options, player) {
     
     var increaseDuration = options.increaseDuration;
     // Number of times to increase volume per minute
-    var increaseSteps = 5;
+    var increaseSteps = 10;
     var increaseVolume = targetVolume / increaseDuration / increaseSteps;
     var currentVolume = 0;
     
@@ -52,15 +52,15 @@ module.exports = function AlarmClock(options, player) {
      * Alarm job trigger event
      */
     var onAlarmTriggerHandler = function () {
-        debug('Alarm triggered! It is now %s', moment().format('MMMM Do YYYY, h:mm:ss a'));
+        debug('Alarm triggered! It is now %s', new Date());
         
         // Start from complete silence before we start playing anything
-        Volume.setVolume(0);
+        resetVolume();
         
         // Start playing audio
         player.play();
         
-        // TODO: emit event (then turn on an LED or animate them like the KITT LED bar)
+        // TODO: emit event (then pulse LED until alarm snooze event is triggered OR the MPC status changed to paused/stop)
         
         // Increase volume every (60 seconds / increase steps) seconds
         Schedule.scheduleJob('*/' + (60 / increaseSteps) + ' * * * * *', onIncreaseVolumeTriggerHandler);
@@ -70,16 +70,16 @@ module.exports = function AlarmClock(options, player) {
      * Alarm snooze job trigger event
      */
     var onFixedSnoozeTriggerHandler = function () {
-        debug('Force-snoozing alarm. Stopping playback.');
+        debug('Force-snoozing alarm. Stopping playback. It is now %s', new Date());
         
         // Stop audio playback
         player.stop();
     };
     
     var onIncreaseVolumeTriggerHandler = function () {
-        debug('Gradually increasing volume by %s%', increaseVolume);
+        debug('Gradually increasing volume by %s% (now at %s)', increaseVolume, currentVolume);
         
-        Volume.setVolume(Math.round(currentVolume));
+        Volume.setVolume(currentVolume);
         
         // Reached target volume
         if (currentVolume >= targetVolume) {
@@ -87,11 +87,26 @@ module.exports = function AlarmClock(options, player) {
             
             // Cancel volume job
             this.cancel();
+            
+            currentVolume = targetVolume;
+            
+            return;
         }
         
         // Volume job runs immediately, so we need to time it right
         // (set to 0 on first run and end at target volume on the minute)
         currentVolume += increaseVolume;
+        currentVolume = Math.round(currentVolume);
+    };
+    
+    
+    
+    var resetVolume = function () {
+        // Set current volume to inbetween alarms
+        currentVolume = 0;
+        
+        // Set system volume
+        Volume.setVolume(currentVolume);
     };
     
     
