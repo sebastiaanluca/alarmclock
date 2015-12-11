@@ -4,6 +4,8 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
 var Gpio = require('onoff').Gpio;
+var PwmGpio = require('pigpio').Gpio;
+
 var Button = require('modules/SebastiaanLuca/Controls/src/Peripherals/Button.js');
 
 //
@@ -19,6 +21,11 @@ var Controls = function Controls() {
     
     // Output
     var appRunningIndicatorLed = new Gpio(25, 'out');
+    
+    var volumeRotaryControl = new PwmGpio(10, {
+        mode: PwmGpio.INPUT,
+        edge: PwmGpio.EITHER_EDGE
+    });
     
     
     
@@ -46,6 +53,12 @@ var Controls = function Controls() {
     
     btnPlayNextTrack.on('pressed', function () {
         self.emit('playNextTrackButtonPressed');
+    });
+    
+    
+    
+    volumeRotaryControl.on('interrupt', function (level) {
+        debug('[VOLUME ROTARY CONTROL] Interrupt!', level);
     });
     
     
