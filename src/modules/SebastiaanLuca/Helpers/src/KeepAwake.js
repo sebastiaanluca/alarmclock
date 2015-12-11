@@ -16,12 +16,3 @@ var KeepAwake = function () {
 
 // Singleton
 module.exports = new KeepAwake();
-
-
-
-
-
-
-
-
-
