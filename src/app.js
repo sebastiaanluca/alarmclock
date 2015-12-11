@@ -19,7 +19,7 @@ var ControlsEventHandler = require('EventHandlers/ControlsEventHandler.js');
 
 //
 
-var DEFAULT_VOLUME = 80;
+var DEFAULT_VOLUME = 76;
 
 //
 
@@ -73,16 +73,16 @@ player.repeat(true);
 // Create an alarm clock using our player
 new AlarmClock({
     // Run every day at
-    at: {hour: 7, minute: 50},
+    at: {hour: 8, minute: 0},
     
     // Auto-snooze after x minutes
-    playTime: 90,
+    playTime: 120,
     
     // Set speaker target volume
     volume: DEFAULT_VOLUME,
     
     // Duration to increase volume to target level (in minutes)
-    increaseDuration: 10
+    increaseDuration: 3
 }, player);
 
 
