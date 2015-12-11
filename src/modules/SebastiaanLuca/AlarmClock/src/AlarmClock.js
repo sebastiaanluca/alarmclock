@@ -97,7 +97,7 @@ module.exports = function AlarmClock(options, player) {
         
         // Reached target volume
         if (currentVolume >= targetVolume) {
-            debug('Reached target volume %s, cancelling volume increase job', targetVolume);
+            debug('Reached target volume %s, cancelling volume increase job.', targetVolume);
             
             // Cancel volume job
             this.cancel();
