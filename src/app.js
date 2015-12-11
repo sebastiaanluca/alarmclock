@@ -5,6 +5,7 @@ console.log('Booting application');
 var debug = require('debug')('alarmclock:app');
 
 require('modules/SebastiaanLuca/Helpers/src/ProcessHelper.js');
+require('modules/SebastiaanLuca/Helpers/src/KeepAwake.js');
 
 var Volume = require('modules/SebastiaanLuca/Volume/src/Volume.js');
 var Player = require('modules/SebastiaanLuca/Player/src/MpdPlayer.js');
@@ -70,7 +71,7 @@ player.repeat(true);
  */
 
 // Create an alarm clock using our player
-var alarm = new AlarmClock({
+new AlarmClock({
     // Run every day at
     at: {hour: 7, minute: 50},
     
