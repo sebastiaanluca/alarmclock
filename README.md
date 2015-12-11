@@ -33,4 +33,4 @@ The NPM `pigpio` requires the `pigpio` C library.
 ## Development
 
 ### Debugging
-Run `clear && export NODE_PATH=src/ && DEBUG=alarmclock:*,SebastiaanLuca:* node src/app.js` to execute and debug the application.
+Run `clear && NODE_PATH=src/ DEBUG=alarmclock:*,SebastiaanLuca:* node src/app.js` to execute and debug the application.
