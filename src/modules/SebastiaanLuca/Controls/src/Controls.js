@@ -37,7 +37,6 @@ var Controls = function Controls() {
     
     
     
-    
     btnPlayPause.on('pressed', function () {
         self.emit('playPauseButtonPressed');
     });
