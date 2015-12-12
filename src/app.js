@@ -73,7 +73,7 @@ player.repeat(true);
  */
 
 // Create an alarm clock using our player
-new AlarmClock({
+var alarm = new AlarmClock({
     // Run every day at
     at: {hour: 8, minute: 0},
     
@@ -84,7 +84,7 @@ new AlarmClock({
     volume: DEFAULT_VOLUME,
     
     // Duration to increase volume to target level (in minutes)
-    increaseDuration: 3
+    increaseDuration: 2
 }, player);
 
 
