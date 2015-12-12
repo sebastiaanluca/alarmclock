@@ -3,8 +3,6 @@ var debug = require('debug')('SebastiaanLuca:Controls:Controls');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
-var Gpio = require('onoff').Gpio;
-
 var Button = require('modules/SebastiaanLuca/Controls/src/Peripherals/Button.js');
 var Led = require('modules/SebastiaanLuca/Controls/src/Peripherals/Led.js');
 
@@ -23,23 +21,14 @@ var Controls = function Controls() {
     var btnVolumeUp = new Button(24);
     
     // Output
-    var appRunningIndicatorLed = new Gpio(25, 'out');
-    var playingIndicatorLed = new Gpio(9, 'out');
+    var appRunningIndicatorLed = new Led(25);
+    var playingIndicatorLed = new Led(9);
     var alarmIndicatorLed = new Led(11);
     
     
     
     var init = function () {
         //
-        alarmIndicatorLed.pulse(true); // REMOVE
-    };
-    
-    var quitHandler = function () {
-        debug('Cleaning up our mess.');
-        
-        // Clear perhipherals
-        appRunningIndicatorLed.unexport();
-        playingIndicatorLed.unexport();
     };
     
     
@@ -69,24 +58,18 @@ var Controls = function Controls() {
     
     
     
-    // Gracefully exit on CTRL+C and errors
-    process.on('forceQuitApplication', quitHandler);
-    
-    
-    
     //
     
     
     
     self.enableAppRunningIndicatorLed = function (enable) {
-        appRunningIndicatorLed.writeSync(enable == true ? 1 : 0);
+        appRunningIndicatorLed.enable(enable);
     };
     
     self.enablePlayingIndicatorLed = function (enable) {
-        playingIndicatorLed.writeSync(enable == true ? 1 : 0);
+        playingIndicatorLed.enable(enable);
     };
     
-    // TODO: move pulse code to LED class (LED = enable/disable/pulse/stop pulse)
     self.enableAlarmIndicatorLedPulse = function (enable) {
         alarmIndicatorLed.pulse(enable);
     };
