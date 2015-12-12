@@ -16,7 +16,8 @@ module.exports = function AlarmClock(options, player) {
     var increaseDuration = options.increaseDuration;
     // Number of times to increase volume per minute
     var increaseSteps = 10;
-    var increaseVolume = targetVolume / increaseDuration / increaseSteps;
+    // Round to one digit
+    var increaseVolume = Math.round(targetVolume / increaseDuration / increaseSteps * 10) / 10;
     var currentVolume = 0;
     
     var alarmJob;
@@ -89,6 +90,7 @@ module.exports = function AlarmClock(options, player) {
             this.cancel();
             
             currentVolume = targetVolume;
+            Volume.setVolume(currentVolume);
             
             return;
         }
