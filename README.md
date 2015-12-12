@@ -10,9 +10,12 @@ To provide a pleasant way to wake up, as I keep hitting snooze on all my other a
 
 ### (Possible) Features
 √ Support for multiple streams
-- Enhanced error handling and backup streams/audio
-- Physical snooze, next stream/track, play/pause, volume (using the Raspberry Pi's GPIO pins)
-- Remote control (using a Spark Core, Laravel/AngularJS web interface)
+? Enhanced error handling and backup streams/audio
+√ Play/pause (GPIO)
+√ Next stream/track (GPIO)
+√ Volume (GPIO) 
+- Physical snooze
+√ Remote control (through any MPD/MPC app)
 - Set alarm times through Google calendar
 - AirPlay support to use it as a generic audio device
 
