@@ -10,8 +10,8 @@ module.exports = function ControlsEventHandler(Controls, player) {
      * Player control
      */
     
-    Controls.on('playPauseButtonPressed', function () {
-        debug('Handling playPauseButtonPressed event');
+    Controls.on('controls:playPauseButtonPressed', function () {
+        debug('Handling controls:playPauseButtonPressed event');
         
         if (player.isPlaying()) {
             debug('PAUSE/STOP');
@@ -28,14 +28,14 @@ module.exports = function ControlsEventHandler(Controls, player) {
      * Track control
      */
     
-    Controls.on('playPreviousTrackButtonPressed', function () {
-        debug('Handling playPreviousTrackButtonPressed event');
+    Controls.on('controls:playPreviousTrackButtonPressed', function () {
+        debug('Handling controls:playPreviousTrackButtonPressed event');
         
         player.previous();
     });
     
-    Controls.on('playNextTrackButtonPressed', function () {
-        debug('Handling playNextTrackButtonPressed event');
+    Controls.on('controls:playNextTrackButtonPressed', function () {
+        debug('Handling controls:playNextTrackButtonPressed event');
         
         player.next();
     });
@@ -44,14 +44,14 @@ module.exports = function ControlsEventHandler(Controls, player) {
      * Volume control 
      */
     
-    Controls.on('volumeDownButtonPressed', function () {
-        debug('Handling volumeDownButtonPressed event');
+    Controls.on('controls:volumeDownButtonPressed', function () {
+        debug('Handling controls:volumeDownButtonPressed event');
         
         Volume.decreaseBy(5);
     });
     
-    Controls.on('volumeUpButtonPressed', function () {
-        debug('Handling volumeUpButtonPressed event');
+    Controls.on('controls:volumeUpButtonPressed', function () {
+        debug('Handling controls:volumeUpButtonPressed event');
         
         Volume.increaseBy(5);
     });

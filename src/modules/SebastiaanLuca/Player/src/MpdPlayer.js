@@ -20,7 +20,6 @@ var Player = function Player(playlist) {
         player = Komponist.createConnection(6600, 'localhost');
         
         // Clear the current playlist
-        // TODO: tie to a physical "reset" button that clears the current MPD playlist and uses the app's
         player.clear();
         
         // Add tracks
@@ -51,7 +50,7 @@ var Player = function Player(playlist) {
     
     
     player.on('changed', function (type) {
-        debug('External event for: ' + type);
+        //  debug('External event for: ' + type);
         
         if (type === 'player') {
             if (self.isPlaying()) {

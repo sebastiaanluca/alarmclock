@@ -4,9 +4,9 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
 var Gpio = require('onoff').Gpio;
-var PwmGpio = require('pigpio').Gpio;
 
 var Button = require('modules/SebastiaanLuca/Controls/src/Peripherals/Button.js');
+var Led = require('modules/SebastiaanLuca/Controls/src/Peripherals/Led.js');
 
 //
 
@@ -25,17 +25,13 @@ var Controls = function Controls() {
     // Output
     var appRunningIndicatorLed = new Gpio(25, 'out');
     var playingIndicatorLed = new Gpio(9, 'out');
-    var alarmIndicatorLed = new PwmGpio(11, {mode: Gpio.OUTPUT});
-    
-    var alarmPulseInterval;
-    var alarmPulseValue = 0;
-    var alarmPulseIncrement = 2;
+    var alarmIndicatorLed = new Led(11);
     
     
     
     var init = function () {
         //
-        self.enableAlarmIndicatorLedPulse(true); // TODO: move to event handler, alarm event
+        alarmIndicatorLed.pulse(true); // REMOVE
     };
     
     var quitHandler = function () {
@@ -44,32 +40,31 @@ var Controls = function Controls() {
         // Clear perhipherals
         appRunningIndicatorLed.unexport();
         playingIndicatorLed.unexport();
-        // alarmIndicatorLed.close(); // Unsupported
     };
     
     
     
     // Play/pause
     btnPlayPause.on('pressed', function () {
-        self.emit('playPauseButtonPressed');
+        self.emit('controls:playPauseButtonPressed');
     });
     
     // Previous/next
     btnPlayPreviousTrack.on('pressed', function () {
-        self.emit('playPreviousTrackButtonPressed');
+        self.emit('controls:playPreviousTrackButtonPressed');
     });
     
     btnPlayNextTrack.on('pressed', function () {
-        self.emit('playNextTrackButtonPressed');
+        self.emit('controls:playNextTrackButtonPressed');
     });
     
     // Volume control
     btnVolumeDown.on('pressed', function () {
-        self.emit('volumeDownButtonPressed');
+        self.emit('controls:volumeDownButtonPressed');
     });
     
     btnVolumeUp.on('pressed', function () {
-        self.emit('volumeUpButtonPressed');
+        self.emit('controls:volumeUpButtonPressed');
     });
     
     
@@ -91,26 +86,9 @@ var Controls = function Controls() {
         playingIndicatorLed.writeSync(enable == true ? 1 : 0);
     };
     
+    // TODO: move pulse code to LED class (LED = enable/disable/pulse/stop pulse)
     self.enableAlarmIndicatorLedPulse = function (enable) {
-        // Stop the pulsing
-        if (enable != true) {
-            clearInterval(alarmPulseInterval);
-            alarmPulseInterval = null;
-            
-            return;
-        }
-        
-        // Start pulsing
-        alarmPulseInterval = setInterval(function () {
-            alarmIndicatorLed.pwmWrite(alarmPulseValue);
-            
-            alarmPulseValue += alarmPulseIncrement;
-            
-            // Reverse
-            if (alarmPulseValue <= 0 || alarmPulseValue >= 255) {
-                alarmPulseIncrement = -alarmPulseIncrement;
-            }
-        }, 20);
+        alarmIndicatorLed.pulse(enable);
     };
     
     
