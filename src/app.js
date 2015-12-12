@@ -16,6 +16,7 @@ var Controls = require('modules/SebastiaanLuca/Controls/src/Controls.js');
 
 // Use event handlers to link events of certain modules to their counterparts
 var ControlsEventHandler = require('EventHandlers/ControlsEventHandler.js');
+var PlayerEventHandler = require('EventHandlers/PlayerEventHandler.js');
 
 //
 
@@ -91,7 +92,10 @@ new AlarmClock({
  * Event handling
  */
 new ControlsEventHandler(Controls, player);
+new PlayerEventHandler(player, Controls);
 
 //
 
 console.log('Application ready!');
+
+Controls.enableAppRunningIndicatorLed(true);

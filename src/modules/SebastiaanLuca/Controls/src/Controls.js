@@ -24,12 +24,18 @@ var Controls = function Controls() {
     
     // Output
     var appRunningIndicatorLed = new Gpio(25, 'out');
+    var playingIndicatorLed = new Gpio(9, 'out');
+    var alarmIndicatorLed = new PwmGpio(11, {mode: Gpio.OUTPUT});
+    
+    var alarmPulseInterval;
+    var alarmPulseValue = 0;
+    var alarmPulseIncrement = 2;
     
     
     
     var init = function () {
-        // Turn on LED indicating application is running
-        appRunningIndicatorLed.writeSync(1);
+        //
+        self.enableAlarmIndicatorLedPulse(true); // TODO: move to event handler, alarm event
     };
     
     var quitHandler = function () {
@@ -37,6 +43,8 @@ var Controls = function Controls() {
         
         // Clear perhipherals
         appRunningIndicatorLed.unexport();
+        playingIndicatorLed.unexport();
+        // alarmIndicatorLed.close(); // Unsupported
     };
     
     
@@ -68,6 +76,46 @@ var Controls = function Controls() {
     
     // Gracefully exit on CTRL+C and errors
     process.on('forceQuitApplication', quitHandler);
+    
+    
+    
+    //
+    
+    
+    
+    self.enableAppRunningIndicatorLed = function (enable) {
+        appRunningIndicatorLed.writeSync(enable == true ? 1 : 0);
+    };
+    
+    self.enablePlayingIndicatorLed = function (enable) {
+        playingIndicatorLed.writeSync(enable == true ? 1 : 0);
+    };
+    
+    self.enableAlarmIndicatorLedPulse = function (enable) {
+        // Stop the pulsing
+        if (enable != true) {
+            clearInterval(alarmPulseInterval);
+            alarmPulseInterval = null;
+            
+            return;
+        }
+        
+        // Start pulsing
+        alarmPulseInterval = setInterval(function () {
+            alarmIndicatorLed.pwmWrite(alarmPulseValue);
+            
+            alarmPulseValue += alarmPulseIncrement;
+            
+            // Reverse
+            if (alarmPulseValue <= 0 || alarmPulseValue >= 255) {
+                alarmPulseIncrement = -alarmPulseIncrement;
+            }
+        }, 20);
+    };
+    
+    
+    
+    //
     
     
     
