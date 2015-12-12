@@ -19,13 +19,11 @@ var Controls = function Controls() {
     var btnPlayPreviousTrack = new Button(27);
     var btnPlayNextTrack = new Button(22);
     
+    var btnVolumeDown = new Button(23);
+    var btnVolumeUp = new Button(24);
+    
     // Output
     var appRunningIndicatorLed = new Gpio(25, 'out');
-    
-    var volumeRotaryControl = new PwmGpio(10, {
-        mode: PwmGpio.INPUT,
-        edge: PwmGpio.EITHER_EDGE
-    });
     
     
     
@@ -43,10 +41,12 @@ var Controls = function Controls() {
     
     
     
+    // Play/pause
     btnPlayPause.on('pressed', function () {
         self.emit('playPauseButtonPressed');
     });
     
+    // Previous/next
     btnPlayPreviousTrack.on('pressed', function () {
         self.emit('playPreviousTrackButtonPressed');
     });
@@ -55,10 +55,13 @@ var Controls = function Controls() {
         self.emit('playNextTrackButtonPressed');
     });
     
+    // Volume control
+    btnVolumeDown.on('pressed', function () {
+        self.emit('volumeDownButtonPressed');
+    });
     
-    
-    volumeRotaryControl.on('interrupt', function (level) {
-        debug('[VOLUME ROTARY CONTROL] Interrupt!', level);
+    btnVolumeUp.on('pressed', function () {
+        self.emit('volumeUpButtonPressed');
     });
     
     
