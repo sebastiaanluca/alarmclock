@@ -1,24 +1,25 @@
 var debug = require('debug')('SebastiaanLuca:Volume:Volume');
 
 var Loudness = require('loudness');
+var deasync = require('deasync');
 
 //
 
 var Volume = function () {
     
     this.getVolume = function () {
-        return Loudness.getVolume(function (err, vol) {
-            if (err) {
-                debug('Error getting volume', err);
-                
-                return;
-            }
-            
-            return vol;
-        })
+        var volume = deasync(Loudness.getVolume);
+        
+        return volume();
     };
     
     this.setVolume = function (vol) {
+        if (vol < 0) {
+            vol = 0;
+        } else if (vol > 100) {
+            vol = 100;
+        }
+        
         Loudness.setVolume(vol, function (err) {
             if (err) {
                 debug('Error setting volume', err);
@@ -26,8 +27,16 @@ var Volume = function () {
                 return;
             }
             
-            debug('Speaker volume set to %s%', vol);
+            debug('System volume set to %s%', vol);
         });
+    };
+    
+    this.decreaseBy = function (num) {
+        this.setVolume(this.getVolume() - num);
+    };
+    
+    this.increaseBy = function (num) {
+        this.setVolume(this.getVolume() + num);
     };
     
 };
