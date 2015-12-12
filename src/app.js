@@ -76,7 +76,7 @@ new AlarmClock({
     at: {hour: 8, minute: 0},
     
     // Auto-snooze after x minutes
-    playTime: 120,
+    playTime: 3 * 60,
     
     // Set speaker target volume
     volume: DEFAULT_VOLUME,
