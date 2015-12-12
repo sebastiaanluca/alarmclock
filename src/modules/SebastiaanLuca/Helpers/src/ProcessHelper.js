@@ -21,6 +21,7 @@ var ProcessHelper = function () {
         quit();
     };
     
+    process.on('SIGTERM', quit);
     process.on('SIGINT', quit);
     process.on('uncaughtException', quitWithError);
     
