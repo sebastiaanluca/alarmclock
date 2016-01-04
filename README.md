@@ -32,8 +32,14 @@ The NPM `pigpio` requires the `pigpio` C library.
  make
  sudo make install
  ```
+ 
+### MPC
+
+#### Local Media
+
+When adding local media stored in `~/Music`, remember to update the MPD database first using `mpc update`.
 
 ## Development
 
 ### Debugging
-Run `clear && NODE_PATH=src/ DEBUG=alarmclock:*,SebastiaanLuca:* node src/app.js` to execute and debug the application.
+Run `clear && NODE_PATH=src/ DEBUG=alarmclock:*,SebastiaanLuca:* node src/app.js` as __root__ (`sudo su root`) to execute and debug the application.
