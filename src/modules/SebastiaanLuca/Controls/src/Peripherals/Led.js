@@ -18,6 +18,7 @@ var Led = function Led(pin) {
     var pulseIncrement = 5;
     
     var DEFAULT_PULSE_INCREMENT = 5;
+    var PULSE_TIMING = 17;
     
     
     
@@ -71,7 +72,7 @@ var Led = function Led(pin) {
             if (currentPulseValue <= 0 || currentPulseValue >= 255) {
                 pulseIncrement = -pulseIncrement;
             }
-        }, 20);
+        }, PULSE_TIMING);
     };
     
     self.reset = function () {
