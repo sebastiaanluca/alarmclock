@@ -1,11 +1,17 @@
 var debug = require('debug')('SebastiaanLuca:EventHandlers:ControlsEventHandler');
 
+var Volume = require('modules/SebastiaanLuca/Volume/src/Volume.js');
+
 //
 
 module.exports = function ControlsEventHandler(Controls, player) {
     
-    Controls.on('playPauseButtonPressed', function () {
-        debug('Handling playPauseButtonPressed event');
+    /*
+     * Player control
+     */
+    
+    Controls.on('controls:playPauseButtonPressed', function () {
+        debug('Handling controls:playPauseButtonPressed event');
         
         if (player.isPlaying()) {
             debug('PAUSE/STOP');
@@ -18,16 +24,36 @@ module.exports = function ControlsEventHandler(Controls, player) {
         player.play();
     });
     
-    Controls.on('playPreviousTrackButtonPressed', function () {
-        debug('Handling playPreviousTrackButtonPressed event');
+    /*
+     * Track control
+     */
+    
+    Controls.on('controls:playPreviousTrackButtonPressed', function () {
+        debug('Handling controls:playPreviousTrackButtonPressed event');
         
         player.previous();
     });
     
-    Controls.on('playNextTrackButtonPressed', function () {
-        debug('Handling playNextTrackButtonPressed event');
+    Controls.on('controls:playNextTrackButtonPressed', function () {
+        debug('Handling controls:playNextTrackButtonPressed event');
         
         player.next();
+    });
+    
+    /*
+     * Volume control 
+     */
+    
+    Controls.on('controls:volumeDownButtonPressed', function () {
+        debug('Handling controls:volumeDownButtonPressed event');
+        
+        Volume.decreaseBy(5);
+    });
+    
+    Controls.on('controls:volumeUpButtonPressed', function () {
+        debug('Handling controls:volumeUpButtonPressed event');
+        
+        Volume.increaseBy(5);
     });
     
     

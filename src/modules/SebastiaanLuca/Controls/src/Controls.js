@@ -3,9 +3,8 @@ var debug = require('debug')('SebastiaanLuca:Controls:Controls');
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 
-var Gpio = require('onoff').Gpio;
-
 var Button = require('modules/SebastiaanLuca/Controls/src/Peripherals/Button.js');
+var Led = require('modules/SebastiaanLuca/Controls/src/Peripherals/Led.js');
 
 //
 
@@ -18,41 +17,66 @@ var Controls = function Controls() {
     var btnPlayPreviousTrack = new Button(27);
     var btnPlayNextTrack = new Button(22);
     
+    var btnVolumeDown = new Button(23);
+    var btnVolumeUp = new Button(24);
+    
     // Output
-    var appRunningIndicatorLed = new Gpio(25, 'out');
+    var appRunningIndicatorLed = new Led(25);
+    var playingIndicatorLed = new Led(9);
+    var alarmIndicatorLed = new Led(11);
     
     
     
     var init = function () {
-        // Turn on LED indicating application is running
-        appRunningIndicatorLed.writeSync(1);
-    };
-    
-    var quitHandler = function () {
-        debug('Cleaning up our mess.');
-        
-        // Clear perhipherals
-        appRunningIndicatorLed.unexport();
+        //
     };
     
     
     
+    // Play/pause
     btnPlayPause.on('pressed', function () {
-        self.emit('playPauseButtonPressed');
+        self.emit('controls:playPauseButtonPressed');
     });
     
+    // Previous/next
     btnPlayPreviousTrack.on('pressed', function () {
-        self.emit('playPreviousTrackButtonPressed');
+        self.emit('controls:playPreviousTrackButtonPressed');
     });
     
     btnPlayNextTrack.on('pressed', function () {
-        self.emit('playNextTrackButtonPressed');
+        self.emit('controls:playNextTrackButtonPressed');
+    });
+    
+    // Volume control
+    btnVolumeDown.on('pressed', function () {
+        self.emit('controls:volumeDownButtonPressed');
+    });
+    
+    btnVolumeUp.on('pressed', function () {
+        self.emit('controls:volumeUpButtonPressed');
     });
     
     
     
-    // Gracefully exit on CTRL+C and errors
-    process.on('forceQuitApplication', quitHandler);
+    //
+    
+    
+    
+    self.enableAppRunningIndicatorLed = function (enable) {
+        appRunningIndicatorLed.enable(enable);
+    };
+    
+    self.enablePlayingIndicatorLed = function (enable) {
+        playingIndicatorLed.enable(enable);
+    };
+    
+    self.enableAlarmIndicatorLedPulse = function (enable) {
+        alarmIndicatorLed.pulse(enable);
+    };
+    
+    
+    
+    //
     
     
     

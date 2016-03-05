@@ -1,13 +1,18 @@
 var debug = require('debug')('SebastiaanLuca:AlarmClock:AlarmClock');
 
 var _ = require('lodash');
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
+
 var Moment = require('moment');
 var Schedule = require('node-schedule');
 var Volume = require('modules/SebastiaanLuca/Volume/src/Volume.js');
 
 //
 
-module.exports = function AlarmClock(options, player) {
+var AlarmClock = function AlarmClock(options, player) {
+    
+    var self = this;
     
     var alarmTime = Moment(options.at);
     var playDuration = options.playTime;
@@ -16,7 +21,8 @@ module.exports = function AlarmClock(options, player) {
     var increaseDuration = options.increaseDuration;
     // Number of times to increase volume per minute
     var increaseSteps = 10;
-    var increaseVolume = targetVolume / increaseDuration / increaseSteps;
+    // Round to one digit
+    var increaseVolume = Math.round(targetVolume / increaseDuration / increaseSteps * 10) / 10;
     var currentVolume = 0;
     
     var alarmJob;
@@ -54,6 +60,8 @@ module.exports = function AlarmClock(options, player) {
     var onAlarmTriggerHandler = function () {
         debug('Alarm triggered! It is now %s', new Date());
         
+        self.emit('alarm:alarm');
+        
         // Start from complete silence before we start playing anything
         resetVolume();
         
@@ -72,6 +80,8 @@ module.exports = function AlarmClock(options, player) {
     var onFixedSnoozeTriggerHandler = function () {
         debug('Force-snoozing alarm. Stopping playback. It is now %s', new Date());
         
+        self.emit('alarm:snooze');
+        
         // Stop audio playback
         player.stop();
     };
@@ -89,6 +99,7 @@ module.exports = function AlarmClock(options, player) {
             this.cancel();
             
             currentVolume = targetVolume;
+            Volume.setVolume(currentVolume);
             
             return;
         }
@@ -114,3 +125,9 @@ module.exports = function AlarmClock(options, player) {
     init();
     
 };
+
+//
+
+util.inherits(AlarmClock, EventEmitter);
+
+module.exports = AlarmClock;

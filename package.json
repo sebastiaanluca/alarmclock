@@ -16,7 +16,7 @@
     "moment": "^2.10.6",
     "node-schedule": "^0.6.0",
     "onoff": "^1.0.3",
-    "player": "^0.6.1",
+    "pigpio": "^0.1.1",
     "playlist-parser": "0.0.12",
     "request": "^2.67.0",
     "speaker": "^0.2.6"

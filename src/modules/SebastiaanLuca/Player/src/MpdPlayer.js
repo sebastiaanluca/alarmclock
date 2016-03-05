@@ -1,11 +1,16 @@
 var debug = require('debug')('SebastiaanLuca:Player:MpdPlayer');
 
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
+
 var Komponist = require('komponist');
 var deasync = require('deasync');
 
 //
 
-module.exports = function Player(playlist) {
+var Player = function Player(playlist) {
+    
+    var self = this;
     
     var player;
     
@@ -15,7 +20,6 @@ module.exports = function Player(playlist) {
         player = Komponist.createConnection(6600, 'localhost');
         
         // Clear the current playlist
-        // TODO: tie to a physical "reset" button that clears the current MPD playlist and uses the app's
         player.clear();
         
         // Add tracks
@@ -41,16 +45,30 @@ module.exports = function Player(playlist) {
     
     
     
-    process.on('forceQuitApplication', function () {
-        if (player) {
-            // TODO: not sure if we should stop playing here, maybe another client initiated playback?
-            player.stop();
+    init();
+    
+    
+    
+    player.on('changed', function (type) {
+        //  debug('External event for: ' + type);
+        
+        if (type === 'player') {
+            if (self.isPlaying()) {
+                self.emit('player:play');
+            } else {
+                self.emit('player:pause');
+            }
         }
     });
     
     
     
-    init();
+    process.on('forceQuitApplication', function () {
+        //    if (player) {
+        //        // TODO: not sure if we should stop playing here, maybe another client initiated playback?
+        //        player.stop();
+        //    }
+    });
     
     
     
@@ -58,7 +76,7 @@ module.exports = function Player(playlist) {
     
     
     
-    this.getStatus = function () {
+    self.getStatus = function () {
         var done = false;
         var status;
         
@@ -66,7 +84,7 @@ module.exports = function Player(playlist) {
             status = result;
             done = true;
         });
-    
+        
         deasync.loopWhile(function () {
             return !done;
         });
@@ -74,18 +92,17 @@ module.exports = function Player(playlist) {
         return status;
     };
     
-    this.isPlaying = function () {
-        var status = this.getStatus();
+    self.isPlaying = function () {
+        var status = self.getStatus();
         
         return status.state !== 'stop' && status.state !== 'pause';
     };
     
     
     
-    this.play = function () {
+    self.play = function () {
         debug('Starting playlist playback');
         
-        // TODO: emit play:load and play:start event (or listen to client status events) + update LED on buffering etc (blinking)
         player.play(function (err) {
             if (err) {
                 debug('Error on playback', err);
@@ -95,34 +112,37 @@ module.exports = function Player(playlist) {
             
             debug('Playback started!');
         });
-        
-        isPlaying = true;
     };
     
-    this.pause = function () {
-        player.stop();
-        isPlaying = false;
-    };
-    
-    this.stop = function () {
+    self.pause = function () {
         player.stop();
     };
     
-    this.next = function () {
+    self.stop = function () {
+        player.stop();
+    };
+    
+    self.next = function () {
         player.next();
     };
     
-    this.previous = function () {
+    self.previous = function () {
         player.previous();
     };
     
-    this.shuffle = function () {
+    self.shuffle = function () {
         player.shuffle();
     };
     
-    this.repeat = function (r) {
+    self.repeat = function (r) {
         repeat = r;
         player.repeat(repeat === true ? 1 : 0);
     };
     
 };
+
+//
+
+util.inherits(Player, EventEmitter);
+
+module.exports = Player;
