@@ -21,7 +21,7 @@ var AlarmEventHandler = require('EventHandlers/AlarmEventHandler.js');
 
 //
 
-var DEFAULT_VOLUME = 78;
+var DEFAULT_VOLUME = 80;
 
 //
 
