@@ -68,8 +68,6 @@ var AlarmClock = function AlarmClock(options, player) {
         // Start playing audio
         player.play();
         
-        // TODO: emit event (then pulse LED until alarm snooze event is triggered OR the MPC status changed to paused/stop)
-        
         // Increase volume every (60 seconds / increase steps) seconds
         Schedule.scheduleJob('*/' + (60 / increaseSteps) + ' * * * * *', onIncreaseVolumeTriggerHandler);
     };

@@ -88,7 +88,7 @@ var alarm = new AlarmClock({
     volume: DEFAULT_VOLUME,
     
     // Duration to increase volume to target level (in minutes)
-    increaseDuration: 4
+    increaseDuration: 2
 }, player);
 
 
