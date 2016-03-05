@@ -53,6 +53,8 @@ var tracks = [
     'http://www.radiofeeds.co.uk/bbc1xtra.pls',
     'http://178.20.171.32:8058/',
     'http://nsbradio.co.uk/listen128k.pls',
+    'http://listen.radionomy.com/jamjazz.m3u',
+    'http://listen.radionomy.com/jampro-jazz.m3u',
     
     // Local backup audio file as backup alarm
     // See ~/Music/
