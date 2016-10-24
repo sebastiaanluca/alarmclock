@@ -21,7 +21,7 @@ var AlarmEventHandler = require('EventHandlers/AlarmEventHandler.js');
 
 //
 
-var DEFAULT_VOLUME = 80;
+var DEFAULT_VOLUME = 90;
 
 //
 
@@ -45,6 +45,7 @@ var tracks = [
     'http://mp3.streampower.be/stubru-high.mp3',
     //    'http://mp3.streampower.be/mnm-high.mp3',
     //    'http://mp3.streampower.be/klara-high.mp3',
+    
     'http://www.plusfm.net/plusfm.m3u',
     'http://stream.boosh.fm:8000/booshfm_128.mp3',
     'http://stream.house-radio.com:8000/main.m3u',
@@ -53,6 +54,19 @@ var tracks = [
     'http://www.radiofeeds.co.uk/bbc1xtra.pls',
     'http://178.20.171.32:8058/',
     'http://nsbradio.co.uk/listen128k.pls',
+    'http://www.uzic.ch/tek.m3u',
+    'http://smoothlounge.com/streams/smoothlounge_256.pls',
+    'http://dnbheaven.com/128kbps.m3u',
+    'http://uk2.internet-radio.com:30252/;listen.mp3',
+    'http://www.danceattack.fm/Dance_Attack_FM.m3u',
+    'https://control.internet-radio.com:2199/tunein/ukvibes.pls',
+    'https://control.internet-radio.com:2199/tunein/deeplondon.pls',
+    'http://dancewave.online/dance.mp3.m3u',
+    'http://listen.54house.fm/listen.pls',
+    'http://majestic.wavestreamer.com:9623/listen.pls',
+    'http://www.dogglounge.com/listen.pls',
+    
+    'http://uk2.internet-radio.com:31491/listen.pls',
     'http://listen.radionomy.com/jamjazz.m3u',
     'http://listen.radionomy.com/jampro-jazz.m3u',
     
@@ -79,7 +93,7 @@ player.repeat(true);
 // Create an alarm clock using our player
 var alarm = new AlarmClock({
     // Run every day at
-    at: {hour: 7, minute: 20},
+    at: {hour: 8, minute: 0},
     
     // Auto-snooze after x minutes
     playTime: 5 * 60,
@@ -88,7 +102,7 @@ var alarm = new AlarmClock({
     volume: DEFAULT_VOLUME,
     
     // Duration to increase volume to target level (in minutes)
-    increaseDuration: 2
+    increaseDuration: 15
 }, player);
 
 
