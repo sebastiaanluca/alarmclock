@@ -32,8 +32,6 @@ var DEFAULT_VOLUME = 90;
 // Set default system volume
 Volume.setVolume(DEFAULT_VOLUME);
 
-
-
 /*
  * Player
  */
@@ -72,11 +70,11 @@ var tracks = [
     
     // Local backup audio file as backup alarm
     // See ~/Music/
-    'cuckoo.mp3'
+    'cuckoo.mp3',
 ];
 
 // Create a playlist
-playlist = new Playlist(tracks);
+const playlist = new Playlist(tracks);
 
 // Create a player using our playlist
 player = new Player(playlist);
@@ -84,16 +82,14 @@ player = new Player(playlist);
 // Set some player options
 player.repeat(true);
 
-
-
 /*
  * Alarm
  */
 
 // Create an alarm clock using our player
-var alarm = new AlarmClock({
+const alarm = new AlarmClock({
     // Run every day at
-    at: {hour: 8, minute: 0},
+    at: {hour: 9, minute: 0},
     
     // Auto-snooze after x minutes
     playTime: 5 * 60,
@@ -102,10 +98,8 @@ var alarm = new AlarmClock({
     volume: DEFAULT_VOLUME,
     
     // Duration to increase volume to target level (in minutes)
-    increaseDuration: 15
+    increaseDuration: 10,
 }, player);
-
-
 
 /*
  * Event handling
