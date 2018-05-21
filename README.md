@@ -27,6 +27,18 @@ https://www.musicpd.org/
 
 Then see `/etc/mpd.conf`
 
+### Supervisor
+
+```
+sudo apt-get install supervisor
+
+sudo ln -nfs /home/pi/alarm-clock/supervisord.conf /etc/supervisor/conf.d/alarm.conf
+
+sudo supervisorctl reread
+sudo supervisorctl update
+supervisorctl start alarm
+```
+
 ## Build process
 
 1. `yarn run dev` in the vagrant virtual machine
