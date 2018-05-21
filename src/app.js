@@ -1,115 +1,49 @@
-console.log('Booting application');
+'use strict'
 
-//
+const debug = require('debug')('alarm:app')
 
-var debug = require('debug')('alarmclock:app');
+debug('Spinning up alarm clock')
 
-require('modules/SebastiaanLuca/Helpers/src/ProcessHelper.js');
-require('modules/SebastiaanLuca/Helpers/src/KeepAwake.js');
+import CleanUpOnQuit from './CleanUpOnQuit'
+import Config from './Config'
+import Volume from './Volume'
+import Player from './Player'
+import Clock from './Clock'
 
-var Volume = require('modules/SebastiaanLuca/Volume/src/Volume.js');
-var Player = require('modules/SebastiaanLuca/Player/src/MpdPlayer.js');
-var Playlist = require('modules/SebastiaanLuca/Player/src/Playlist.js');
+new CleanUpOnQuit(process)
 
-var AlarmClock = require('modules/SebastiaanLuca/AlarmClock/src/AlarmClock.js');
-var Controls = require('modules/SebastiaanLuca/Controls/src/Controls.js');
+(async () => {
+    try {
+        const config = await Config.create('default.json')
+        const volume = new Volume(config.get('volume'))
+        const player = await Player.create(config.get('tracks'))
 
-// Use event handlers to link events of certain modules to their counterparts
-var ControlsEventHandler = require('EventHandlers/ControlsEventHandler.js');
-var PlayerEventHandler = require('EventHandlers/PlayerEventHandler.js');
-var AlarmEventHandler = require('EventHandlers/AlarmEventHandler.js');
+        player.setRepeat(true)
 
-//
+        const clock = new Clock(
+            player,
+            volume
+        )
 
-var DEFAULT_VOLUME = 90;
+        clock.setAlarmTime(
+            config.get('alarm.hour'),
+            config.get('alarm.minute')
+        )
 
-//
+        clock.setVolumeIncreaseDuration(
+            config.get('alarm.volumeIncreaseDuration')
+        )
 
-/*
- * Volume
- */
+        clock.setTargetVolume(config.get('volume'))
 
-// Set default system volume
-Volume.setVolume(DEFAULT_VOLUME);
+        clock.setSnoozeAfter(
+            config.get('alarm.snoozeAfter')
+        )
 
-/*
- * Player
- */
+        clock.start()
+    } catch (error) {
+        console.error(error)
 
-// TODO: move to config file
-// See https://github.com/motdotla/dotenv + https://github.com/harishanchu/nodejs-config
-// TODO: add button to reset (player playlist and reload+readd streams from config file (should it have changed))
-var tracks = [
-    'http://mp3.streampower.be/stubru-high.mp3',
-    //    'http://mp3.streampower.be/mnm-high.mp3',
-    //    'http://mp3.streampower.be/klara-high.mp3',
-    
-    'http://www.plusfm.net/plusfm.m3u',
-    'http://stream.boosh.fm:8000/booshfm_128.mp3',
-    'http://stream.house-radio.com:8000/main.m3u',
-    'http://1.fm/TuneIn/dubstep128k.pls',
-    'http://uk1.internet-radio.com:15634/listen.pls',
-    'http://www.radiofeeds.co.uk/bbc1xtra.pls',
-    'http://178.20.171.32:8058/',
-    'http://nsbradio.co.uk/listen128k.pls',
-    'http://www.uzic.ch/tek.m3u',
-    'http://smoothlounge.com/streams/smoothlounge_256.pls',
-    'http://dnbheaven.com/128kbps.m3u',
-    'http://uk2.internet-radio.com:30252/;listen.mp3',
-    'http://www.danceattack.fm/Dance_Attack_FM.m3u',
-    'https://control.internet-radio.com:2199/tunein/ukvibes.pls',
-    'https://control.internet-radio.com:2199/tunein/deeplondon.pls',
-    'http://dancewave.online/dance.mp3.m3u',
-    'http://listen.54house.fm/listen.pls',
-    'http://majestic.wavestreamer.com:9623/listen.pls',
-    'http://www.dogglounge.com/listen.pls',
-    
-    'http://uk2.internet-radio.com:31491/listen.pls',
-    'http://listen.radionomy.com/jamjazz.m3u',
-    'http://listen.radionomy.com/jampro-jazz.m3u',
-    
-    // Local backup audio file as backup alarm
-    // See ~/Music/
-    'cuckoo.mp3',
-];
-
-// Create a playlist
-const playlist = new Playlist(tracks);
-
-// Create a player using our playlist
-player = new Player(playlist);
-
-// Set some player options
-player.repeat(true);
-
-/*
- * Alarm
- */
-
-// Create an alarm clock using our player
-const alarm = new AlarmClock({
-    // Run every day at
-    at: {hour: 9, minute: 0},
-    
-    // Auto-snooze after x minutes
-    playTime: 5 * 60,
-    
-    // Set speaker target volume
-    volume: DEFAULT_VOLUME,
-    
-    // Duration to increase volume to target level (in minutes)
-    increaseDuration: 10,
-}, player);
-
-/*
- * Event handling
- */
-new ControlsEventHandler(Controls, player);
-new PlayerEventHandler(player, Controls);
-new AlarmEventHandler(alarm, Controls);
-
-//
-
-console.log('Application ready!');
-
-Controls.enableAppRunningIndicatorLed(true);
+        process.exit()
+    }
+})()

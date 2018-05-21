@@ -1,0 +1,15 @@
+{
+    "volume": 90,
+    "alarm": {
+        "hour": 2,
+        "minute": 6,
+        "volumeIncreaseDuration": 1,
+        "snoozeAfter": 2
+    },
+    "tracks": [
+        "http://uk2.internet-radio.com:8024/listen.pls",
+        "https://control.internet-radio.com:2199/tunein/ukvibes.pls",
+        "http://stream.house-radio.com:8000/main.m3u",
+        "http://mp3.streampower.be/stubru-high.mp3"
+    ]
+}

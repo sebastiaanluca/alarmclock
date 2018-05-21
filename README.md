@@ -1,47 +1,38 @@
 # Alarm Clock
 
-## About
+## TODO
 
-### What
-NodeJS alarm clock for the Raspberry Pi (but should work on any platform).
+- [ ] Set up Supervisor script
+- [ ] Check if Node setTimeOut() bug was solved and KeepAwake is no longer required
+- [ ] Exit process every ~2 days at night so Supervisor can restart it and it's refreshed
+- [ ] Read time twice daily from Google calendar
 
-### Goal
-To provide a pleasant way to wake up, as I keep hitting snooze on all my other alarm clocks :)
+## Requirements
 
-### (Possible) Features
-- [x] Support for multiple streams
-- [ ] Enhanced error handling
-- [x] Backup streams/audio
-- [x] Play/pause (GPIO)
-- [x] Next stream/track (GPIO)
-- [x] Volume (GPIO) 
-- [ ] Physical snooze
-- [x] Remote control (through any MPD/MPC app)
-- [ ] Set alarm times through Google calendar
-- [ ] AirPlay support to use it as a generic audio device
-- [ ] Fix an async.io bug (crashes when too many MPC play events are triggered)
+### Amixer
 
-## Installation
+`sudo apt-get install alsa-utils`
 
-### Pi GPIO
+### Sound dev packages
 
-The NPM `pigpio` requires the `pigpio` C library.
- 
- ```
- wget abyz.co.uk/rpi/pigpio/pigpio.zip
- unzip pigpio.zip
- cd PIGPIO
- make
- sudo make install
- ```
- 
-### MPC
+`sudo apt-get install libasound2-dev`
 
-#### Local Media
+See [https://www.npmjs.com/package/speaker]().
 
-When adding local media stored in `~/Music`, make sure you have enough permissions to access it and remember to update the MPD database first using `mpc update`.
+### Music Player Daemon
 
-## Development
+https://www.musicpd.org/
 
-### Debugging
-Run `clear && NODE_PATH=src/ DEBUG=alarmclock:*,SebastiaanLuca:* node src/app.js` as __root__ (`sudo su root`) to execute and debug the application.
+`sudo apt-get install mpd mpc`
+
+Then see `/etc/mpd.conf`
+
+## Build process
+
+1. `yarn run dev` in the vagrant virtual machine
+2. Upload (CMD+SHIFT+D) build/alarm.js to the Raspberry Pi
+3. `clear && DEBUG=alarm:* node alarm.js` on the Raspberry Pi
+
+## References
+
+- https://www.raspberrypi.org/forums/viewtopic.php?t=6056
