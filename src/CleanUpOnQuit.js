@@ -1,6 +1,6 @@
 'use strict'
 
-const debug = require('debug')('alarm:CleanUpOnQuit')
+const debug = require('debug')('alarm:clean-up')
 
 export default class {
     process
@@ -8,15 +8,15 @@ export default class {
     constructor(process) {
         this.process = process
 
-        this.process.on('SIGTERM', this.quit)
-        this.process.on('SIGINT', this.quit)
-        this.process.on('uncaughtException', this.quitWithError)
+        this.process.on('SIGTERM', this.quit.bind(this))
+        this.process.on('SIGINT', this.quit.bind(this))
+        this.process.on('uncaughtException', this.quitWithError.bind(this))
     }
 
     quit() {
         debug('Cleaning up application resources')
 
-        process.emit('app:quit:force')
+        process.emit('app:quit')
 
         // Give the rest of the application some time to handle their affairs
         setTimeout(function () {

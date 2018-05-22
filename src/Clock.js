@@ -152,7 +152,7 @@ export default class {
     }
 
     setVolumeIncreaseDuration(minutes) {
-        debug('Setting volume increase duration to %i minute', minutes)
+        debug('Setting volume increase duration to %i minutes', minutes)
 
         this.volumeIncreaseDuration = minutes
     }

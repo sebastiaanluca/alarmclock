@@ -9,6 +9,10 @@
 
 ## Requirements
 
+### Node
+
+### Yarn
+
 ### Amixer
 
 `sudo apt-get install alsa-utils`
@@ -34,8 +38,8 @@ sudo apt-get install supervisor
 
 sudo ln -nfs /home/pi/alarm-clock/supervisord.conf /etc/supervisor/conf.d/alarm.conf
 
-sudo supervisorctl reread
-sudo supervisorctl update
+supervisorctl reread
+supervisorctl update
 supervisorctl start alarm
 ```
 

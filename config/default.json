@@ -45,8 +45,6 @@
         "http://indiesstandup.com:2199/tunein/icradiodj2.pls",
         "http://mp3.streampower.be/stubru-high.mp3",
         "http://mp3.streampower.be/mnm-high.mp3",
-        "http://mp3.streampower.be/klara-high.mp3",
-        "file:///home/pi/Music/Linkin Park.mp3",
-        "file:///home/pi/Music/cuckoo.mp3"
+        "http://mp3.streampower.be/klara-high.mp3"
     ]
 }
