@@ -38,6 +38,7 @@
         "debug": "cd build && DEBUG=alarm:* node alarm.js",
         "test": "yarn run dev && clear && yarn run debug",
         "run-debug": "clear && DEBUG=alarm:* node alarm.js",
-        "run": "clear && node alarm.js"
+        "run": "clear && node alarm.js",
+        "restart": "sudo supervisorctl restart alarm"
     }
 }
