@@ -1,10 +1,10 @@
 {
-    "volume": 90,
+    "volume": 80,
     "alarm": {
-        "hour": 2,
-        "minute": 6,
-        "volumeIncreaseDuration": 1,
-        "snoozeAfter": 2
+        "hour": 18,
+        "minute": 1,
+        "volumeIncreaseDuration": 2,
+        "snoozeAfter": 10
     },
     "tracks": [
         "http://uk2.internet-radio.com:8024/listen.pls",
