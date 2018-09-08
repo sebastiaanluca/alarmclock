@@ -4,13 +4,10 @@ const debug = require('debug')('alarm:app')
 
 debug('Spinning up alarm clock')
 
-//import CleanUpOnQuit from './CleanUpOnQuit'
 import Config from './Config'
 import Volume from './Volume'
 import Player from './Player'
 import Clock from './Clock'
-
-//new CleanUpOnQuit(process)
 
 (async () => {
     try {
