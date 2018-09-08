@@ -12,30 +12,17 @@ import Clock from './Clock'
 (async () => {
     try {
         const config = await Config.create('default.json')
-        const volume = new Volume(config.get('volume'))
+        const mixer = new Volume(config.get('volume'))
         const player = await Player.create(config.get('tracks'))
 
         player.setRepeat(true)
 
-        const clock = new Clock(
-            player,
-            volume
-        )
+        const clock = new Clock(player, mixer)
 
-        clock.setAlarmTime(
-            config.get('alarm.hour'),
-            config.get('alarm.minute')
-        )
-
-        clock.setVolumeIncreaseDuration(
-            config.get('alarm.volumeIncreaseDuration')
-        )
-
+        clock.setAlarmTime(config.get('alarm.hour'), config.get('alarm.minute'))
+        clock.setVolumeIncreaseDuration(config.get('alarm.volumeIncreaseDuration'))
         clock.setTargetVolume(config.get('volume'))
-
-        clock.setSnoozeAfter(
-            config.get('alarm.snoozeAfter')
-        )
+        clock.setSnoozeAfter(config.get('alarm.snoozeAfter'))
 
         clock.start()
     } catch (error) {
