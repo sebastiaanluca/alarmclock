@@ -8,7 +8,7 @@ import Schedule from 'node-schedule'
 export default class {
     player
 
-    volume
+    mixer
     targetVolume
     volumeIncreaseSteps = 10
     volumeIncreaseDuration
@@ -24,7 +24,7 @@ export default class {
 
     constructor(player, volume) {
         this.player = player
-        this.volume = volume
+        this.mixer = volume
     }
 
     start() {
@@ -101,10 +101,9 @@ export default class {
 
                 this.currentVolume = 0
 
-                // Wait for the volume to be set to 0, otherwise we
-                // can get a gap where volume is high and player start
-                // playing while it should start from 0
-                await this.volume.setVolume(this.currentVolume)
+                // Wait for the volume to be set to 0, otherwise we sometimes get a
+                // gap where the volume is high and the player starts playing
+                await this.mixer.setVolume(this.currentVolume)
 
                 this.player.play()
 
@@ -120,7 +119,7 @@ export default class {
 
     onAlarmVolumeIncrease() {
         this.currentVolume = Math.ceil(this.currentVolume + this.increaseVolume)
-        this.volume.setVolume(this.currentVolume)
+        this.mixer.setVolume(this.currentVolume)
 
         debug('Increased volume by %i%', this.increaseVolume)
 
@@ -133,7 +132,7 @@ export default class {
         this.cancelVolumeJob()
 
         this.currentVolume = this.targetVolume
-        this.volume.setVolume(this.currentVolume)
+        this.mixer.setVolume(this.currentVolume)
     }
 
     onAlarmEnd() {
