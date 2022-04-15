@@ -5,7 +5,8 @@ const debug = require('debug')('alarm:player')
 import Komponist from 'komponist'
 import Playlist from './Playlist'
 
-export default class {
+export default class
+{
     sources
     playlist
     player
@@ -59,6 +60,10 @@ export default class {
         this.player.repeat(repeat === true ? 1 : 0)
     }
 
+    shuffle() {
+        this.player.random()
+    }
+
     play() {
         debug('Starting playback')
 
@@ -68,7 +73,7 @@ export default class {
     pause() {
         debug('Pausing playback')
 
-        this.player.pause()
+        this.player.toggle()
     }
 
     stop() {

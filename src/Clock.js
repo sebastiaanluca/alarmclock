@@ -5,7 +5,8 @@ const debug = require('debug')('alarm:clock')
 import Moment from 'moment'
 import Schedule from 'node-schedule'
 
-export default class {
+export default class
+{
     player
 
     mixer
@@ -105,6 +106,7 @@ export default class {
                 // gap where the volume is high and the player starts playing
                 await this.mixer.setVolume(this.currentVolume)
 
+                this.player.shuffle()
                 this.player.play()
 
                 this.scheduleVolumeIncreaseJob()

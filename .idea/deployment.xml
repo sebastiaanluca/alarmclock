@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="Raspberry Pi" stopOnFirstError="true" createEmptyFolders="true">
+    <serverData>
+      <paths name="Raspberry Pi">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/alarm" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/Music" local="$PROJECT_DIR$/resources/audio" web="/" />
+            <mapping deploy="/alarm/supervisord.conf" local="$PROJECT_DIR$/resources/supervisord.conf" web="/" />
+            <mapping deploy="/alarm" local="$PROJECT_DIR$/build" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="/yarn.lock" />
+            <excludedPath local="true" path="/node_modules" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
