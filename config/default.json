@@ -1,15 +1,18 @@
 {
     "volume": 100,
     "alarm": {
-        "hour": 11,
-        "minute": 0,
+        "hour": 10,
+        "minute": 30,
         "volumeIncreaseDuration": 1,
         "snoozeAfter": 120
     },
     "tracks": [
+        "http://91.134.147.168:9582/listen.pls?sid=1&t=.pls",
+        "http://edmdnb.com:8000/radio.mp3.m3u&t=.pls",
+        "http://azuracast.horus.ca.deck8.net:8000/radio.mp3.m3u&t=.pls",
+        "http://uk7.internet-radio.com:8000/listen.pls&t=.pls",
         "http://pulseedm.cdnstream1.com:8124/1373_128.m3u",
         "http://www.danceattack.fm/Dance_Attack_FM.m3u",
-        "https://51.195.81.90:8024/listen.pls",
         "https://plusfm.net/m3u/plusfm-multi.m3u",
         "http://149.255.59.162:8062/listen.pls",
         "http://108.178.13.122:8195/listen.pls",
