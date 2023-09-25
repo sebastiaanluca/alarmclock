@@ -2,12 +2,18 @@
   "volume": 100,
   "alarm": {
     "hour": 11,
-    "minute": 15,
-    "volumeIncreaseDuration": 1,
-    "snoozeAfter": 105
+    "minute": 0,
+    "volumeIncreaseDuration": 5,
+    "snoozeAfter": 90
   },
   "tracks": [
-    "http://209.9.229.216:80/listen.pls",
+    "https://playerservices.streamtheworld.com/api/livestream-redirect/TOPEDITIE1.mp3",
+    "http://198.15.94.34:8006/stream/1/",
+    "https://uk7.internet-radio.com:8000/listen.pls",
+    "http://uk6.internet-radio.com:8332/listen.pls",
+    "http://uk5.internet-radio.com:8318/live.m3u",
+    "http://uk5.internet-radio.com:8310/listen.pls",
+    "http://uk4.internet-radio.com:8019/listen.pls",
     "http://51.89.148.171:8022/listen.pls",
     "http://stream.syntheticfm.com:8040/live",
     "http://91.121.175.25:8000/listen.pls",
