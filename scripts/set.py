@@ -43,10 +43,14 @@ try:
     with open(config_file, 'w') as f:
         json.dump(data, f, indent=4)
 
-    print(f"Alarm set to {hour}:{minute}")
+    output = subprocess.check_output(["sudo", "supervisorctl", "restart", "alarm"], stderr=subprocess.STDOUT, text=True)
 
-    # Restart the 'alarm' supervisor program
-    subprocess.run(["sudo", "supervisorctl", "restart", "alarm"])
+    if "alarm: stopped" not in output or "alarm: started" not in output:
+        print("Error: unable to restart alarm")
+        sys.exit(1)
+
+    print(f"Alarm set to {hour}:{minute}")
+    sys.exit(0)
 except FileNotFoundError:
     print(f"Config file not found: {config_file}")
     sys.exit(1)
