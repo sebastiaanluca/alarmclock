@@ -3,6 +3,11 @@
 import sys
 import json
 import re
+import os
+
+# Get the directory one level above where the script is located
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+config_file = os.path.join(root_dir, "config/default.json")
 
 # Check if the correct number of arguments is provided
 if len(sys.argv) != 2:
@@ -24,8 +29,6 @@ hour, minute = time_str.split(':')
 hour = int(hour)
 minute = int(minute)
 
-config_file = "config/default.json"
-
 try:
     # Read the JSON file
     with open(config_file, 'r') as f:
@@ -39,7 +42,7 @@ try:
     with open(config_file, 'w') as f:
         json.dump(data, f, indent=4)
 
-    print(f"Hour and minute updated successfully to {hour}:{minute} in {config_file}")
+    print(f"Alarm set to {hour}:{minute}")
 except FileNotFoundError:
     print(f"Config file not found: {config_file}")
     sys.exit(1)
