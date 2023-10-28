@@ -2,6 +2,7 @@
 
 import sys
 import json
+import re
 
 # Check if the correct number of arguments is provided
 if len(sys.argv) != 2:
@@ -10,6 +11,13 @@ if len(sys.argv) != 2:
 
 # Command line argument in the format "hour:minute"
 time_str = sys.argv[1]
+
+# Validate the input format using regular expression
+if not re.match(r'^\d{1,2}:\d{2}$', time_str):
+    print("Invalid input format. Please use the 'hour:minute' format (e.g., '12:30').")
+    sys.exit(1)
+
+# Split the input string into hour and minute
 hour, minute = time_str.split(':')
 
 # Convert hour and minute to integers
