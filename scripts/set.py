@@ -4,6 +4,7 @@ import sys
 import json
 import re
 import os
+import subprocess
 
 # Get the directory one level above where the script is located
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -43,6 +44,9 @@ try:
         json.dump(data, f, indent=4)
 
     print(f"Alarm set to {hour}:{minute}")
+
+    # Restart the 'alarm' supervisor program
+    subprocess.run(["sudo", "supervisorctl", "restart", "alarm"])
 except FileNotFoundError:
     print(f"Config file not found: {config_file}")
     sys.exit(1)
