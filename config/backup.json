@@ -1,0 +1,38 @@
+{
+  "volume": 100,
+  "alarm": {
+    "hour": 12,
+    "minute": 30,
+    "volumeIncreaseDuration": 5,
+    "snoozeAfter": 90
+  },
+  "tracks": [
+    "https://playerservices.streamtheworld.com/api/livestream-redirect/TOPEDITIE1.mp3",
+    "http://198.15.94.34:8006/stream/1/",
+    "https://uk7.internet-radio.com:8000/listen.pls",
+    "http://uk6.internet-radio.com:8332/listen.pls",
+    "http://uk5.internet-radio.com:8318/live.m3u",
+    "http://uk5.internet-radio.com:8310/listen.pls",
+    "http://uk4.internet-radio.com:8019/listen.pls",
+    "http://51.89.148.171:8022/listen.pls",
+    "http://stream.syntheticfm.com:8040/live",
+    "http://91.121.175.25:8000/listen.pls",
+    "https://i4.streams.ovh:9000/listen.pls",
+    "http://fr1.1mix.co.uk:8060/listen.pls",
+    "http://edmdnb.com:8000/radio.mp3.m3u",
+    "http://51.89.195.240:8034/listen.pls",
+    "http://91.134.147.168:9582/listen.pls",
+    "http://edmdnb.com:8000/radio.mp3.m3u",
+    "http://azuracast.horus.ca.deck8.net:8000/radio.mp3.m3u",
+    "http://uk7.internet-radio.com:8000/listen.pls",
+    "http://pulseedm.cdnstream1.com:8124/1373_128.m3u",
+    "http://www.danceattack.fm/Dance_Attack_FM.m3u",
+    "https://plusfm.net/m3u/plusfm-multi.m3u",
+    "http://149.255.59.162:8062/listen.pls",
+    "http://108.178.13.122:8195/listen.pls",
+    "http://192.99.41.102:5429/listen.pls",
+    "http://62.210.105.16:7000/listen.pls",
+    "http://stream.dancewave.online:8080/dance.aac.m3u",
+    "http://1.fm/TuneIn/dubstep128k.pls"
+  ]
+}
