@@ -4,13 +4,18 @@ import sys
 import json
 
 # Check if the correct number of arguments is provided
-if len(sys.argv) != 3:
-    print("Usage: {} <hour> <minute>".format(sys.argv[0]))
+if len(sys.argv) != 2:
+    print("Usage: {} <hour:minute>".format(sys.argv[0]))
     sys.exit(1)
 
-# Command line arguments
-hour = sys.argv[1]
-minute = sys.argv[2]
+# Command line argument in the format "hour:minute"
+time_str = sys.argv[1]
+hour, minute = time_str.split(':')
+
+# Convert hour and minute to integers
+hour = int(hour)
+minute = int(minute)
+
 config_file = "config/default.json"
 
 try:
@@ -19,8 +24,8 @@ try:
         data = json.load(f)
 
     # Update the hour and minute values
-    data['alarm']['hour'] = int(hour)
-    data['alarm']['minute'] = int(minute)
+    data['alarm']['hour'] = hour
+    data['alarm']['minute'] = minute
 
     # Write the updated JSON back to the file
     with open(config_file, 'w') as f:
