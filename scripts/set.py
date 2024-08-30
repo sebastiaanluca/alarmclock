@@ -24,11 +24,20 @@ if not re.match(r'^\d{1,2}:\d{2}$', time_str):
     sys.exit(1)
 
 # Split the input string into hour and minute
-hour, minute = time_str.split(':')
+#hour, minute = time_str.split(':')
+
+hour, minute = map(int, time_str.split(':'))
+
+hour = f"{hour:02}"
+minute = f"{minute:02}"
 
 # Convert hour and minute to integers
-hour = int(hour)
-minute = int(minute)
+#hour = int(hour)
+#minute = int(minute)
+
+# Ensure the minute part has two digits
+#hour = hour.zfill(2)
+#minute = minute.zfill(2)
 
 try:
     # Read the JSON file
@@ -43,6 +52,8 @@ try:
     with open(config_file, 'w') as f:
         json.dump(data, f, indent=4)
 
+    subprocess.run(["mpc", "random", "on"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
     output = subprocess.check_output(["sudo", "supervisorctl", "restart", "alarm"], stderr=subprocess.STDOUT, text=True)
 
     if "alarm: stopped" not in output or "alarm: started" not in output:
@@ -50,6 +61,7 @@ try:
         sys.exit(1)
 
     print(f"Alarm set to {hour}:{minute}")
+
     sys.exit(0)
 except FileNotFoundError:
     print(f"Config file not found: {config_file}")
@@ -57,6 +69,8 @@ except FileNotFoundError:
 except json.JSONDecodeError:
     print(f"Error parsing JSON in {config_file}")
     sys.exit(1)
+except subprocess.CalledProcessError as e:
+    print(f"Error: {e}")
 except Exception as e:
     print(f"An error occurred: {e}")
     sys.exit(1)

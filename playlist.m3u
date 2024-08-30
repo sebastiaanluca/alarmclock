@@ -1,0 +1,40 @@
+#EXTM3U
+
+#EXTINF:-1,TopSpinning
+https://25583.live.streamtheworld.com/TOPSPINNING.mp3
+
+#EXTINF:-1,TopVersuz
+https://25483.live.streamtheworld.com/TOPVERSUZ.mp3
+
+#EXTINF:-1,One World Radio Vlaams
+https://playerservices.streamtheworld.com/api/livestream-redirect/OWR_VLAABRX.mp3
+
+#EXTINF:-1,One World Radio International
+https://playerservices.streamtheworld.com/api/livestream-redirect/OWR_INTERNATIONAL_ADP.m3u8
+
+#EXTINF:-1,One World Radio DAB
+https://23553.live.streamtheworld.com/OWR_DABAAC.aac
+
+#EXTINF:-1,I Love Radio 1
+#https://streams.ilovemusic.de/iloveradio1.mp3
+
+#EXTINF:-1,I Love Radio 2
+#https://streams.ilovemusic.de/iloveradio2.mp3
+
+#EXTINF:-1,I Love Radio 6
+#https://streams.ilovemusic.de/iloveradio6.mp3
+
+#EXTINF:-1,I Love Radio 21
+#https://streams.ilovemusic.de/iloveradio21.mp3
+
+#EXTINF:-1,Dance Wave
+#http://stream.dancewave.online:8080/dance.aac.m3u
+
+#EXTINF:-1,Dance Attack FM
+#http://www.danceattack.fm/Dance_Attack_FM.m3u
+
+#EXTINF:-1,Pulse EDM
+#http://pulseedm.cdnstream1.com:8124/1373_128.m3u
+
+#EXTINF:-1,Plus FM
+#https://plusfm.net/m3u/plusfm-multi.m3u

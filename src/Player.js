@@ -30,6 +30,7 @@ export default class
         return new Promise(resolve => {
             debug('Connecting to Music Player daemon')
 
+            // TODO: return player?
             Komponist.createConnection(6600, 'localhost', (ignored, client) => {
                 debug('Connected to Music Player daemon')
 

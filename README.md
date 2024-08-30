@@ -1,3 +1,14 @@
+# Radio
+
+```
+sudo ln -s /home/ubuntu/alarm/playlist.m3u /var/lib/mpd/playlists/playlist.m3u
+sudo chown mpd:audio /var/lib/mpd/playlists/playlist.m3u
+sudo chmod 644 /home/ubuntu/alarm/playlist.m3u
+mpc clear
+mpc load playlist
+mpc play
+```
+
 # Alarm Clock
 
 ## TODO
